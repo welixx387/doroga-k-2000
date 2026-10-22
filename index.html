@@ -1,0 +1,1136 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Шахматный план на 360 дней до 2000 рапид: каждый день до часа — задачи, партии, разборы, серия, рейтинг и награды.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231D5843'/%3E%3Ctext x='32' y='47' font-size='42' text-anchor='middle' fill='white'%3E%E2%99%98%3C/text%3E%3C/svg%3E">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Дорога к 2000</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Unbounded:wght@500;700&display=swap">
+<style>
+/* Layout: a tournament table. Felt-green ground, brass for progress, flag-red only for what needs attention.
+   A two-column desk on wide screens (today's work + side stats), one column on phones. */
+:root{
+  --bg:#ECF1ED; --surface:#FFFFFF; --surface-2:#E2EAE4; --ink:#13231D; --muted:#53655D; --line:#CCD8D0;
+  --felt:#1D5843; --felt-ink:#FFFFFF; --felt-soft:#D5E6DC;
+  --brass:#8A661C; --brass-soft:#F2E8CC;
+  --flag:#B43F2B; --flag-soft:#F7DED7;
+  --sq-a:#DCE5DF; --sq-b:#C9D6CD; --sq-done:#2E7A55; --sq-done-2:#256848; --sq-min:#C39A3F; --sq-part:#A9CDB8;
+  --scrim:rgba(11,26,21,.45);
+  --shadow:0 1px 2px rgba(19,35,29,.06), 0 8px 24px rgba(19,35,29,.06);
+  --f-display:"Unbounded","Golos Text",system-ui,sans-serif;
+  --f-body:"Golos Text","Segoe UI",system-ui,-apple-system,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  --f-glyph:"Segoe UI Symbol","Noto Sans Symbols 2","DejaVu Sans","Apple Symbols",serif;
+  --r:14px; --r-s:9px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1A15; --surface:#12261E; --surface-2:#183126; --ink:#E3ECE6; --muted:#90A499; --line:#244136;
+    --felt:#3E9A75; --felt-ink:#04110C; --felt-soft:#173A2D;
+    --brass:#D6B05C; --brass-soft:#352C15;
+    --flag:#E66B53; --flag-soft:#3A1E17;
+    --sq-a:#183126; --sq-b:#1F3B2F; --sq-done:#3E9A75; --sq-done-2:#358866; --sq-min:#B48E3C; --sq-part:#285C47;
+    --scrim:rgba(0,0,0,.55);
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1A15; --surface:#12261E; --surface-2:#183126; --ink:#E3ECE6; --muted:#90A499; --line:#244136;
+  --felt:#3E9A75; --felt-ink:#04110C; --felt-soft:#173A2D;
+  --brass:#D6B05C; --brass-soft:#352C15;
+  --flag:#E66B53; --flag-soft:#3A1E17;
+  --sq-a:#183126; --sq-b:#1F3B2F; --sq-done:#3E9A75; --sq-done-2:#358866; --sq-min:#B48E3C; --sq-part:#285C47;
+  --scrim:rgba(0,0,0,.55);
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+h1,h2,h3{text-wrap:balance;margin:0}
+p{margin:0}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.glyph{font-family:var(--f-glyph);font-style:normal;line-height:1}
+.eyebrow{font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.hint{font-size:13px;color:var(--muted)}
+
+.app{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 120px}
+
+/* header */
+.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding-block:18px 8px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--f-display);font-weight:700;font-size:17px;letter-spacing:-.01em}
+.brand .mark{display:grid;place-items:center;width:34px;height:34px;border-radius:9px;background:var(--felt);color:var(--felt-ink);font-size:21px}
+.brand small{display:block;font-family:var(--f-body);font-weight:500;font-size:12px;color:var(--muted);letter-spacing:0}
+.tabs{display:flex;gap:2px;overflow-x:auto;max-width:100%;padding:4px;background:var(--surface-2);border-radius:12px;scrollbar-width:none}
+.tab{border:0;background:transparent;padding:8px 14px;border-radius:9px;font:500 14px var(--f-body);color:var(--muted);cursor:pointer;white-space:nowrap}
+.tab:hover{color:var(--ink)}
+.tab[aria-current="page"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.tab .count{display:inline-block;min-width:18px;margin-left:6px;padding:0 5px;border-radius:9px;background:var(--flag);color:var(--surface);font:700 11px/18px var(--f-mono);text-align:center}
+
+button{font:inherit;color:inherit}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:var(--r-s);border:1px solid var(--line);background:var(--surface);color:var(--ink);font:500 13.5px var(--f-body);text-decoration:none;cursor:pointer;line-height:1.25}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--felt);color:var(--felt-ink);border-color:transparent}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn.ghost{background:transparent}
+.btn.warn{border-color:var(--flag);color:var(--flag);background:transparent}
+.btn.warn.armed{background:var(--flag);color:var(--surface)}
+.btn.big{padding:12px 18px;font-size:15px}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.btn .ext{font-size:11px;opacity:.7}
+:is(.btn,.tab,.check,.sq,.seg-o input,input,select,textarea,a):focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+
+/* layout */
+.desk{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:28px;align-items:start;margin-top:8px}
+.side{display:grid;gap:14px}
+@media (max-width:920px){.desk{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.card-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:10px}
+
+/* banner */
+.banner{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;margin-top:10px;border-radius:var(--r);background:var(--felt);color:var(--felt-ink)}
+.banner p{max-width:62ch}
+.banner b{font-family:var(--f-display);font-weight:500;font-size:15px;display:block;margin-bottom:2px}
+.banner .btn{background:var(--felt-ink);color:var(--felt);border-color:transparent}
+
+/* hero */
+.hero{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:22px;align-items:end;padding-block:24px 18px}
+.daynum-wrap{display:grid;justify-items:start}
+.daynum{font-family:var(--f-display);font-weight:700;font-size:clamp(60px,10vw,108px);line-height:.88;letter-spacing:-.05em;color:var(--felt)}
+.daynum-wrap .of{font-size:13px;color:var(--muted);margin-top:6px}
+.hero-meta{display:grid;gap:8px;min-width:0}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:var(--surface-2);font-size:12.5px;font-weight:500;color:var(--ink)}
+.chip.stage{background:var(--felt-soft);color:var(--ink)}
+.chip.exam{background:var(--brass-soft)}
+.chip .glyph{font-size:15px}
+.hero h1{font-family:var(--f-display);font-weight:500;font-size:clamp(24px,3.4vw,36px);letter-spacing:-.02em;line-height:1.1}
+.hero-sub{font-size:13px;color:var(--muted)}
+.daynav{display:flex;gap:6px}
+.daynav .btn{padding:8px 11px}
+@media (max-width:640px){
+  .hero{grid-template-columns:auto minmax(0,1fr);gap:14px 18px}
+  .daynav{grid-column:1 / -1}
+}
+.dayprog{height:6px;border-radius:6px;background:var(--surface-2);overflow:hidden}
+.dayprog span{display:block;height:100%;background:var(--felt);border-radius:6px;transition:width .3s ease}
+
+.notice{margin-top:12px;padding:10px 14px;border-radius:var(--r-s);background:var(--surface-2);font-size:13.5px;color:var(--muted)}
+
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-block:16px}
+@media (max-width:640px){.rules{grid-template-columns:1fr}}
+.rule{padding:12px 14px;border-radius:var(--r-s);background:var(--brass-soft)}
+.rule.theme{background:var(--felt-soft)}
+.rule p{margin-top:4px;font-size:14px}
+
+/* tasks */
+.tasks{display:grid;gap:10px}
+.task{display:grid;grid-template-columns:32px minmax(0,1fr);gap:14px;padding:16px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);transition:background .2s ease,border-color .2s ease}
+.task.done{background:var(--surface-2);border-color:transparent}
+.task.done .task-title{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--line);text-decoration-thickness:1.5px}
+.check{width:30px;height:30px;border-radius:8px;border:2px solid var(--line);background:var(--surface);display:grid;place-items:center;cursor:pointer;padding:0;color:transparent;transition:background .15s ease,border-color .15s ease,transform .15s ease}
+.check:hover{border-color:var(--felt)}
+.check[aria-pressed="true"]{background:var(--felt);border-color:var(--felt);color:var(--felt-ink)}
+.check[aria-pressed="true"].min{background:var(--sq-min);border-color:var(--sq-min)}
+.check:active{transform:scale(.92)}
+.check[disabled]{cursor:not-allowed;opacity:.45}
+.check svg{width:16px;height:16px}
+.task-head{display:flex;justify-content:space-between;gap:4px 12px;align-items:baseline;flex-wrap:wrap}
+.kind{display:block;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.kind.k-game,.kind.k-test{color:var(--felt)}
+.kind.k-an{color:var(--brass)}
+.task-title{font-weight:600;font-size:16px;line-height:1.35}
+.mins{font-family:var(--f-mono);font-size:12.5px;color:var(--muted);white-space:nowrap}
+.task-x{color:var(--muted);margin-top:4px;max-width:68ch;font-size:14.5px}
+.task-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
+.inline-in{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;color:var(--muted)}
+.inline-in input{width:90px}
+
+.minimum{display:grid;grid-template-columns:32px minmax(0,1fr);gap:14px;padding:14px 16px;border:1.5px dashed var(--line);border-radius:var(--r);margin-top:10px}
+.minimum p{font-size:14px;color:var(--muted)}
+.minimum b{color:var(--ink)}
+
+/* side cards */
+.rnow{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.rnow .big{font-family:var(--f-display);font-weight:700;font-size:40px;letter-spacing:-.03em;line-height:1}
+.rnow .to{color:var(--muted);font-family:var(--f-mono);font-size:14px}
+.rbar{position:relative;height:10px;border-radius:10px;background:var(--surface-2);margin:14px 0 8px}
+.rbar span{position:absolute;left:0;top:0;bottom:0;border-radius:10px;background:var(--brass)}
+.rbar i{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink);border-radius:2px}
+.small{font-size:13px;color:var(--muted)}
+.stat-row{display:flex;align-items:baseline;gap:8px}
+.stat-row .big{font-family:var(--f-display);font-weight:700;font-size:34px;letter-spacing:-.03em;line-height:1}
+.strip{display:grid;grid-template-columns:repeat(14,minmax(0,1fr));margin-top:12px;border-radius:6px;overflow:hidden}
+.strip i{aspect-ratio:1;max-width:100%;background:var(--sq-a)}
+.strip i:nth-child(even){background:var(--sq-b)}
+.strip i.done{background:var(--sq-done)} .strip i.done:nth-child(even){background:var(--sq-done-2)}
+.strip i.min{background:var(--sq-min)}
+.strip i.part{background:var(--sq-part)}
+.xpbar{height:8px;border-radius:8px;background:var(--surface-2);overflow:hidden;margin:10px 0 6px}
+.xpbar span{display:block;height:100%;background:var(--felt)}
+.pending{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.pending .n{font-family:var(--f-display);font-weight:700;font-size:26px;color:var(--flag)}
+.pending.zero .n{color:var(--felt)}
+.mini-ach{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.mini-ach span{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:8px;background:var(--surface-2);font-size:12.5px;font-weight:500}
+
+/* plan board */
+.plan-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:12px;padding-block:24px 16px}
+.plan-head h1{font-family:var(--f-display);font-weight:500;font-size:clamp(24px,3.4vw,34px);letter-spacing:-.02em}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:12.5px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:14px;height:14px;border-radius:3px;display:inline-block}
+.stages{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media (max-width:980px){.stages{grid-template-columns:minmax(0,1fr)}}
+.stage{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.stage-h{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;margin-bottom:6px}
+.stage-h .glyph{font-size:38px;color:var(--felt)}
+.stage-h h2{font-family:var(--f-display);font-weight:500;font-size:18px;letter-spacing:-.01em}
+.stage-h .pct{font-family:var(--f-display);font-weight:700;font-size:22px;color:var(--brass)}
+.stage .goal{font-size:13.5px;color:var(--muted);margin-bottom:12px}
+.wk{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding-block:3px}
+.wk-l{display:flex;gap:8px;align-items:baseline;min-width:0;font-size:13.5px}
+.wk-l .mono{color:var(--muted);font-size:11.5px;flex:none;width:22px}
+.wk-l span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wk.exam .wk-l{font-weight:600}
+.sqs{display:grid;grid-template-columns:repeat(7,26px);border-radius:4px;overflow:hidden}
+.sq{width:26px;height:26px;border:0;padding:0;cursor:pointer;background:var(--sq-a);position:relative}
+.sq.b{background:var(--sq-b)}
+.sq.done{background:var(--sq-done)} .sq.done.b{background:var(--sq-done-2)}
+.sq.min{background:var(--sq-min)}
+.sq.part{background:var(--sq-part)}
+.sq.miss{background:var(--flag-soft)}
+.sq.today{box-shadow:inset 0 0 0 3px var(--brass)}
+.sq.blank{visibility:hidden;cursor:default}
+@media (max-width:420px){.sqs{grid-template-columns:repeat(7,22px)}.sq{width:22px;height:22px}}
+
+/* games */
+.summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-block:4px 16px}
+@media (max-width:640px){.summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.sum{padding:14px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.sum .v{font-family:var(--f-display);font-weight:700;font-size:26px;letter-spacing:-.02em;line-height:1.1;margin-top:4px}
+.chart-wrap{overflow-x:auto}
+.chart{display:block;width:100%;min-width:480px;height:auto}
+.chart .grid{stroke:var(--line);stroke-width:1}
+.chart .sep{stroke:var(--line);stroke-width:1;stroke-dasharray:2 4}
+.chart .ax{fill:var(--muted);font:11px var(--f-mono)}
+.chart .stl{fill:var(--muted);font:600 11px var(--f-body);letter-spacing:.06em}
+.chart .target{stroke:var(--brass);stroke-width:2;stroke-dasharray:6 5;fill:none}
+.chart .line{stroke:var(--felt);stroke-width:2.5;fill:none;stroke-linejoin:round;stroke-linecap:round}
+.chart .area{fill:var(--felt);opacity:.12}
+.chart .dot{fill:var(--felt);stroke:var(--surface);stroke-width:2}
+.chart .now{stroke:var(--ink);stroke-width:1;opacity:.35}
+.chart .lbl{fill:var(--ink);font:700 12px var(--f-mono)}
+.chart .tlbl{fill:var(--brass);font:600 11px var(--f-body)}
+.games-tools{display:flex;flex-wrap:wrap;gap:8px;margin-block:16px 10px}
+.glist{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.game{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:6px 14px;padding:14px 16px;border-top:1px solid var(--line);align-items:start}
+.game:first-child{border-top:0}
+.res{display:inline-grid;place-items:center;min-width:86px;padding:4px 8px;border-radius:8px;font-size:12.5px;font-weight:600}
+.res.W{background:var(--felt-soft);color:var(--felt)}
+.res.D{background:var(--brass-soft);color:var(--brass)}
+.res.L{background:var(--flag-soft);color:var(--flag)}
+.game-main{min-width:0;display:grid;gap:3px}
+.game-line{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:13.5px;color:var(--muted);align-items:center}
+.game-line b{color:var(--ink);font-weight:600}
+.game-err{font-size:14px;overflow-wrap:anywhere}
+.tag{display:inline-block;padding:2px 8px;border-radius:6px;font-size:12px;font-weight:600;background:var(--surface-2);color:var(--muted)}
+.tag.flag{background:var(--flag-soft);color:var(--flag)}
+.tag.ok{background:var(--felt-soft);color:var(--felt)}
+.game-act{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+@media (max-width:640px){.game{grid-template-columns:minmax(0,1fr)}.game-act{flex-direction:row;flex-wrap:wrap;align-items:center}}
+.empty{padding:28px 18px;text-align:center;color:var(--muted)}
+.empty b{display:block;color:var(--ink);font-family:var(--f-display);font-weight:500;font-size:16px;margin-bottom:4px}
+
+/* awards */
+.ranks{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.rank{padding:6px 10px;border-radius:8px;background:var(--surface-2);font-size:12.5px;color:var(--muted)}
+.rank.on{background:var(--felt);color:var(--felt-ink)}
+.rank.cur{box-shadow:inset 0 0 0 2px var(--brass)}
+.achs{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-top:16px}
+.ach{display:grid;grid-template-columns:44px minmax(0,1fr);gap:12px;align-items:center;padding:14px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.ach .glyph{display:grid;place-items:center;width:44px;height:44px;border-radius:10px;background:var(--brass-soft);color:var(--brass);font-size:26px}
+.ach b{display:block;font-size:14.5px}
+.ach span{font-size:13px;color:var(--muted)}
+.ach.locked{background:transparent;border-style:dashed}
+.ach.locked .glyph{background:var(--surface-2);color:var(--muted);opacity:.6}
+.ach.locked b{color:var(--muted)}
+
+/* forms */
+.setup{max-width:760px;padding-block:24px 0}
+.setup h1{font-family:var(--f-display);font-weight:500;font-size:clamp(24px,3.6vw,34px);letter-spacing:-.02em;margin-block:6px 8px}
+.setup-intro p{color:var(--muted);max-width:62ch}
+.form{display:grid;gap:18px;margin-top:18px;padding:20px}
+fieldset{border:0;padding:0;margin:0;display:grid;gap:8px}
+legend,.lbl{font-weight:600;font-size:14px;padding:0;margin-bottom:8px}
+label.field{display:grid;gap:6px;font-weight:600;font-size:14px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:640px){.row2,.row3{grid-template-columns:minmax(0,1fr)}}
+input[type=number],input[type=text],input[type=url],input[type=date],select,textarea{width:100%;padding:9px 11px;border-radius:var(--r-s);border:1px solid var(--line);background:var(--surface);color:var(--ink);font:400 14.5px var(--f-body)}
+textarea{resize:vertical;min-height:62px}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg-o{position:relative;cursor:pointer}
+.seg-o input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.seg-o span{display:inline-block;padding:9px 14px;border-radius:var(--r-s);border:1px solid var(--line);background:var(--surface);font-size:14px;font-weight:500}
+.seg-o input:checked + span{background:var(--felt);color:var(--felt-ink);border-color:var(--felt)}
+.seg-o input:focus-visible + span{outline:2px solid var(--brass);outline-offset:2px}
+.check-row{display:flex;gap:10px;align-items:center;font-size:14px}
+.check-row input{width:18px;height:18px;accent-color:var(--felt)}
+.danger{margin-top:16px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px}
+.danger p{max-width:52ch;font-size:13.5px;color:var(--muted)}
+
+/* overlay */
+.overlay{position:fixed;inset:0;z-index:50;display:grid;place-items:center;background:var(--scrim);padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.dialog{width:min(540px,100%);max-height:100%;overflow:auto;background:var(--surface);border-radius:16px;padding:22px;box-shadow:var(--shadow);display:grid;gap:16px}
+.dialog h2{font-family:var(--f-display);font-weight:500;font-size:20px}
+.dialog .actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+
+.timerbar{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--felt);color:var(--felt-ink);padding-top:10px;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.timer-in{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.timer-t{font-family:var(--f-mono);font-weight:700;font-size:24px;font-variant-numeric:tabular-nums}
+.timer-l{flex:1;min-width:0;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.timerbar .btn{background:transparent;color:var(--felt-ink);border-color:currentColor}
+.timerbar .btn.solid{background:var(--felt-ink);color:var(--felt);border-color:transparent}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:60;max-width:calc(100% - 32px);padding:11px 16px;border-radius:12px;background:var(--ink);color:var(--bg);font-size:14px;box-shadow:var(--shadow)}
+.toast .glyph{margin-right:6px}
+
+footer.foot{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 20px;font-size:12.5px;color:var(--muted)}
+
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand"><span class="mark glyph">♘&#xFE0E;</span><span>Дорога к 2000<small>360 дней · час в день</small></span></div>
+    <nav class="tabs" id="tabs" aria-label="Разделы"></nav>
+  </header>
+  <main id="view"></main>
+  <footer class="foot">
+    <span>План по мотивам видео канала e2e4 — <a href="https://www.youtube.com/watch?v=tjluJAoP6E4" target="_blank" rel="noopener">«Я делаю ВСЁ, что скажет нейросеть, чтобы поднять 2000 ELO»</a></span>
+    <span id="storeNote">Подключаю хранилище…</span>
+  </footer>
+</div>
+<div class="timerbar" id="timerbar" hidden></div>
+<div class="overlay" id="overlay" hidden><div class="dialog" id="dialog" role="dialog" aria-modal="true"></div></div>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+(function(){
+'use strict';
+const PLAN_DAYS=360, DAY_MS=86400000;
+const $=(s,r=document)=>r.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const G=c=>'<span class="glyph">'+c+'\uFE0E</span>';
+const clone=o=>JSON.parse(JSON.stringify(o));
+const CHECK='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+/* ---------------- dates ---------------- */
+function ymd(dt){return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');}
+function utc(s){const a=String(s).split('-').map(Number);return Date.UTC(a[0],a[1]-1,a[2]);}
+function todayYmd(){return ymd(new Date());}
+function ymdUTC(t){const d=new Date(t);return d.getUTCFullYear()+'-'+String(d.getUTCMonth()+1).padStart(2,'0')+'-'+String(d.getUTCDate()).padStart(2,'0');}
+const fmtLong=new Intl.DateTimeFormat('ru-RU',{weekday:'short',day:'numeric',month:'long',timeZone:'UTC'});
+const fmtShort=new Intl.DateTimeFormat('ru-RU',{day:'numeric',month:'short',timeZone:'UTC'});
+function dayIndexOf(s){return Math.floor((utc(s)-utc(prof().start))/DAY_MS)+1;}
+function dateOfDay(d){return ymdUTC(utc(prof().start)+(d-1)*DAY_MS);}
+function todayIdx(){return dayIndexOf(todayYmd());}
+function clampDay(d){return Math.max(1,Math.min(PLAN_DAYS,d));}
+function plural(n,a,b,c){const m=Math.abs(n)%100,k=m%10;if(m>10&&m<20)return c;if(k>1&&k<5)return b;if(k===1)return a;return c;}
+
+/* ---------------- plan content ---------------- */
+const STAGES=[
+ {g:'♙',roman:'I',name:'Перестать зевать',
+  goal:'Убрать подарки сопернику: привычка проверять ход, базовая тактика, элементарные эндшпили.',
+  habit:'Перед каждым ходом: шахи, взятия, угрозы — сначала за соперника, потом за себя.',
+  game:'Перед каждым ходом проверьте: что соперник атакует после моего хода? В рапиде время есть — не играйте быстрее, чем нужно.',
+  open:'Первые 6–8 ходов и типичные ловушки. Задача — выйти из дебюта без потери материала и с рокировкой.'},
+ {g:'♘',roman:'II',name:'Видеть тактику',
+  goal:'Комбинации в 3–4 хода, ладейные и лёгкофигурные эндшпили, главные линии своих дебютов.',
+  habit:'На каждом ходу спросите: какие мои фигуры не защищены и где у соперника тактика?',
+  game:'Ищите тактику у соперника на каждом ходу: незащищённые фигуры, открытый король, связки.',
+  open:'Главная линия до 10–12 хода и тактические удары, характерные для этого дебюта.'},
+ {g:'♗',roman:'III',name:'Понимать позицию',
+  goal:'Планы в миттельшпиле, пешечные структуры, партии мастеров, техника реализации.',
+  habit:'Когда тактики нет — нужен план на 3–5 ходов: худшая фигура, слабое поле, открытая линия.',
+  game:'Если тактики нет, составьте план: какая фигура стоит хуже всех и куда её перевести. После партии запишите план.',
+  open:'Какие пешечные структуры получаются из дебюта и какие планы в них играют мастера.'},
+ {g:'♕',roman:'IV',name:'Расчёт и турнирная форма',
+  goal:'Кандидатные ходы, точный счёт, защита трудных позиций, контроль времени.',
+  habit:'К 20-му ходу на часах — не меньше половины времени. В критический момент — три кандидата и счёт.',
+  game:'Следите за часами: к 20-му ходу должно оставаться не меньше половины времени. В острый момент выпишите в уме 3 кандидата.',
+  open:'Проверьте по журналу, на каком ходу вы выходите из подготовки, и закройте эту дыру одной линией.'}
+];
+const W=(t,p,idea,end,ei)=>({t,p,idea,end,ei});
+const WEEKS=[
+ [
+  W('Висящие фигуры','hangingPiece','До 1200 большинство партий решает незащищённая фигура. Учимся замечать, что «висит», — и у себя, и у соперника.','Мат ферзём','Ферзь ходом коня от короля сужает «коробку», король помогает в конце. Главная опасность — пат.'),
+  W('Вилка','fork','Одна фигура нападает сразу на две цели. Чаще всего вилку ставит конь: проверяйте поля, куда он прыгнет через ход.','Мат ладьёй','Ладья отрезает короля по линии, свой король встаёт в оппозицию, ладья даёт шах.'),
+  W('Связка','pin','Связанная фигура не может уйти, не открыв более ценную. Нападайте на неё ещё раз — лучше всего пешкой.','Оппозиция','Короли стоят напротив через одно поле. Кому не нужно ходить, тот держит оппозицию.'),
+  W('Мат в 1–2 хода','mateIn2','Матовые узоры нужно узнавать сразу. Начинайте с проверки всех шахов, даже тех, что кажутся бессмысленными.','Король и пешка против короля','Король впереди своей пешки — ключ к победе. Выучите ключевые поля.'),
+  W('Слабость последней горизонтали','backRankMate','Король, запертый своими пешками, гибнет от ладьи на первой линии. Делайте «форточку» вовремя.','Правило квадрата','Успеет ли король догнать проходную, видно по квадрату от пешки до поля превращения.'),
+  W('Вскрытое нападение','discoveredAttack','Фигура уходит и открывает линию для ферзя, ладьи или слона. Со вскрытым шахом это почти всегда выигрыш материала.','Ферзь против пешки на 7-й','Ферзь шахами заставляет короля встать перед пешкой, а свой король подходит ближе.'),
+  W('Линейный удар','skewer','Нападение на ценную фигуру, за которой стоит менее ценная. Это связка наоборот.','Пешечный прорыв','Три пешки против трёх: жертвой двух пешек можно создать проходную.'),
+  W('Ловля фигуры','trappedPiece','Фигуре некуда отступить — её можно выиграть. Чаще всего ловят слона на краю и ферзя, ушедшего за пешками.','Ладья против пешки','Отрезать короля от пешки и успеть встать ладьёй позади неё.'),
+  W('Атака на f2 и f7','attackingF2F7','Самая слабая точка в начале партии: её защищает только король. Здесь живут детский мат и большинство дебютных ловушек.','Отдалённая проходная','Проходная на другом фланге уводит короля соперника, а ваш король забирает пешки.'),
+  W('Уничтожение защиты','capturingDefender','Сначала бьём фигуру, которая защищает, потом забираем то, что она защищала.','Треугольник','Король тратит темп, обходя треугольником, и передаёт очередь хода сопернику.'),
+  W('Двойной шах','doubleCheck','От двойного шаха можно только уйти королём. Это самый сильный вид вскрытого нападения.','Активный король','В эндшпиле король — сильная фигура. Ведите его в центр, к пешкам.'),
+  W('Повторение этапа','short','Задачи в 2–3 хода вперемешку, без подсказки темы — как в настоящей партии.','Повторение эндшпилей этапа','Сыграйте каждую изученную позицию против компьютера.')
+ ],
+ [
+  W('Отвлечение','deflection','Жертвой уводим фигуру с важного поля или линии — и защита рушится.','Позиция Филидора','Защита в ладейном эндшпиле: ладья держит 6-ю горизонталь, пока пешка не пойдёт вперёд, потом шахи сзади.'),
+  W('Завлечение','attraction','Жертвой заманиваем короля или фигуру на поле, где её ждёт удар.','Позиция Лусены','«Строим мост»: ладья прикрывает короля от шахов, и пешка проходит.'),
+  W('Промежуточный ход','intermezzo','Не спешите забирать фигуру обратно: сначала шах или угроза, потом взятие.','Активная ладья','В ладейных эндшпилях активная ладья часто важнее пешки.'),
+  W('Перекрытие','interference','Ставим фигуру между защитником и тем, что он защищает.','Ладья позади проходной','Правило Тарраша: ладья стоит позади проходной — своей и чужой.'),
+  W('Освобождение поля','clearance','Жертвуем фигуру, чтобы освободить поле или линию для другой.','Слон против коня','Слон силён в открытых позициях и при пешках на обоих флангах.'),
+  W('Рентген','xRayAttack','Фигура действует сквозь другую фигуру — свою или чужую.','Разноцветные слоны','Даже две лишние пешки часто не выигрывают: защищающийся блокирует поля своего цвета.'),
+  W('Тихий ход','quietMove','Не шах и не взятие, но после него у соперника нет защиты.','Одноцветные слоны','Пешки ставьте на поля, противоположные цвету своего слона.'),
+  W('Мат в 3 хода','mateIn3','Считаем на три хода вперёд: форсированные шахи и все ответы соперника.','Конь против пешки','Конь хуже всего справляется с крайней пешкой.'),
+  W('Жертва','sacrifice','Отдаём материал ради атаки или выигрыша большего. Считаем, что получаем взамен.','Ферзевые эндшпили','Король прячется от вечного шаха, главное — продвигать проходную.'),
+  W('Проходная пешка','advancedPawn','Пешка на 6–7-й горизонтали стоит фигуры. Учимся видеть комбинации на превращение.','Пешечный цугцванг','Тот, кто должен ходить, проигрывает. Считайте темпы.'),
+  W('Защитный ход','defensiveMove','Найти единственную защиту — тоже тактика. Учимся видеть угрозу соперника.','Четыре пешки против трёх','Частый ладейный эндшпиль: создать проходную и не разменять все пешки.'),
+  W('Длинные комбинации','long','Задачи на 4 хода и больше: доводим расчёт до конца, не останавливаясь на первом ударе.','Повторение ладейных эндшпилей','Филидор, Лусена, активная ладья — каждую позицию против компьютера.')
+ ],
+ [
+  W('Развитие и центр','opening','Каждый ход в дебюте — новая фигура в игре. Пешки в центре, рокировка — до атаки.','Ладья на 7-й горизонтали','Ладья на 7-й прижимает короля и собирает пешки.'),
+  W('Открытые линии','middlegame','Ладьи ставят на открытые и полуоткрытые линии. Две ладьи на одной линии сильнее вдвое.','Ладья против лёгкой фигуры','Как реализовать лишнее качество: берегите пешки, слабейшей стороне выгоден их размен.'),
+  W('Слабые поля и форпосты','middlegame','Поле, откуда фигуру нельзя прогнать пешкой, — идеальный дом для коня.','Конь против слона','Закрытая позиция и опорные поля — за коня; открытая и пешки на обоих флангах — за слона.'),
+  W('Хороший и плохой слон','bishopEndgame','Слон, запертый своими пешками, — плохой. Меняйте его или переставляйте пешки.','Слоновые эндшпили','Пешки ставьте на поля другого цвета, чем ваш слон.'),
+  W('Изолированная пешка','middlegame','С изолятором играйте активно и атакуйте. Против изолятора блокируйте поле перед ним и меняйте фигуры.','Пешечное большинство','Большинство на фланге превращается в проходную: первой идёт пешка без соперницы.'),
+  W('Пешечные слабости','pawnEndgame','Сдвоенные, отсталые и изолированные пешки — долгосрочные цели. Нападайте на них фигурами.','Слабые пешки в эндшпиле','Сдвоенные и изолированные пешки — лёгкая цель для короля и ладьи.'),
+  W('Атака на короля','kingsideAttack','Перевес сил у короля, вскрытие линий пешками, жертвы на h7 и g7.','Конь и пешки','Конь сильнее всего, когда все пешки на одном фланге.'),
+  W('Открытый король','exposedKing','Без пешечного укрытия король уязвим: подключайте к атаке ферзя и ладьи.','Ферзь и пешки','Король прячется от шахов за пешками, проходная решает.'),
+  W('Профилактика','defensiveMove','Спросите: что хочет соперник? Помешайте его плану до того, как он начнётся.','Крепость','Иногда меньший материал держит ничью: ищите неприступную расстановку.'),
+  W('Размены','advantage','Меняйтесь, если вы впереди по материалу или снимаете сильную фигуру соперника. Свои лучшие фигуры берегите.','Переход в пешечный эндшпиль','Перед разменом последних фигур посчитайте пешечный эндшпиль до конца.'),
+  W('Реализация перевеса','crushing','Лишняя фигура — ещё не победа. Упрощайте, не давайте контригры, не спешите.','Техника лишней пешки','Создайте проходную, активируйте короля и только потом идите вперёд.'),
+  W('Повторение: позиционная игра','middlegame','Темы этапа вперемешку. В каждой партии найдите момент, где помог план.','Повторение эндшпилей этапа','Сыграйте три позиции этапа против компьютера.')
+ ],
+ [
+  W('Кандидатные ходы','long','Прежде чем считать, найдите 2–3 кандидата. Первый пришедший в голову ход — только один из вариантов.','Ладейные эндшпили: повторение','Филидор, Лусена и активная ладья — каждая позиция против компьютера.'),
+  W('Визуализация','mateIn3','Решайте задачу полностью в голове и только потом двигайте фигуры. Тренажёр координат помогает видеть доску.','Пешечные эндшпили: повторение','Оппозиция, квадрат, треугольник — быстро и без ошибок.'),
+  W('Форсированные варианты','veryLong','Шахи, взятия и угрозы сужают ответы соперника. Такие варианты можно досчитать до конца.','Ферзевые эндшпили','Защита от вечного шаха и продвижение проходной.'),
+  W('Мат в 4 хода и больше','mateIn4','Длинные матовые атаки: ищите форсированную последовательность, а не красивый первый ход.','Лёгкие фигуры: повторение','Слон против коня и разноцветные слоны.'),
+  W('Защита трудных позиций','defensiveMove','В плохой позиции ищите активность и практические шансы. На 1500–1900 многие партии спасаются упорством.','Ничейные приёмы','Пат, вечный шах, крепость — запасной выход из проигранной позиции.'),
+  W('Точность в равных позициях','equality','Найти единственный ход, который держит равенство. Не каждая позиция требует атаки.','Ладья против лёгкой фигуры','Ничейные и выигрышные расстановки.'),
+  W('Острые позиции','sacrifice','Жертвы ради инициативы: считайте, что получаете взамен — время, линии, короля соперника.','Эндшпили с проходными','Связанные и отдалённые проходные против фигуры.'),
+  W('Быстрое узнавание','short','Шаблоны должны узнаваться за секунды: это экономит время на часах для сложных моментов.','Эндшпиль на время','Сыграйте изученные позиции против компьютера с часами 3+2.'),
+  W('Эндшпиль в практике','endgame','Задачи из реальных эндшпилей: точность в упрощённых позициях.','Эндшпили из ваших партий','Возьмите эндшпиль из своей партии и доиграйте его против компьютера.'),
+  W('Задачи из партий мастеров','master','Комбинации, которые встречаются в серьёзной практике.','Техника реализации','Лишняя пешка в ладейном эндшпиле: создать проходную, активировать короля.'),
+  W('Ваши слабые темы','dashboard','Lichess показывает темы, где вы ошибаетесь чаще всего. Эта неделя — для них.','Ваш худший эндшпиль','Какой тип эндшпиля вы проигрываете чаще всего? Повторите его.'),
+  W('Финальная подготовка','mix','Смешанная тактика и короткая разминка перед каждой партией — режим, с которым вы идёте на цель.','Итоговое повторение','Ключевые позиции года — по одной за занятие.')
+ ]
+];
+const MASTERS=[
+ ['Морфи — герцог Брауншвейгский и граф Изуар, Париж 1858','Morphy Opera Game'],
+ ['Андерсен — Дюфрен, Берлин 1852','Anderssen Dufresne Evergreen'],
+ ['Ласкер — Капабланка, Санкт-Петербург 1914','Lasker Capablanca 1914'],
+ ['Фишер — Спасский, Рейкьявик 1972, 6-я партия','Fischer Spassky 1972 game 6'],
+ ['Ротлеви — Рубинштейн, Лодзь 1907','Rotlewi Rubinstein 1907'],
+ ['Карпов — Унцикер, Ницца 1974','Karpov Unzicker 1974'],
+ ['Андерсен — Кизерицкий, Лондон 1851','Anderssen Kieseritzky Immortal'],
+ ['Д. Бирн — Фишер, Нью-Йорк 1956','Byrne Fischer Game of the Century'],
+ ['Ботвинник — Капабланка, АВРО 1938','Botvinnik Capablanca AVRO 1938'],
+ ['Капабланка — Тартаковер, Нью-Йорк 1924','Capablanca Tartakower 1924'],
+ ['Каспаров — Топалов, Вейк-ан-Зее 1999','Kasparov Topalov 1999'],
+ [null,null]
+];
+const REP={
+ white:[
+  {id:'italian',name:'Итальянская партия',moves:'1.e4 e5 2.Кf3 Кc6 3.Сc4',url:'https://lichess.org/opening/Italian_Game',hint:'Идеи: c3 и d4 в центре, давление на f7, рокировка до активных действий.'},
+  {id:'scotch',name:'Шотландская партия',moves:'1.e4 e5 2.Кf3 Кc6 3.d4',url:'https://lichess.org/opening/Scotch_Game',hint:'Сразу открываем центр, быстрое развитие, игра против слабостей после размена на d4.'},
+  {id:'london',name:'Лондонская система',moves:'1.d4, 2.Сf4, 3.e3',url:'https://lichess.org/opening/London_System',hint:'Одна расстановка почти против всего: Сf4, e3, c3, Кd2, Сd3. Следите за ударом Фb6 по b2.'},
+  {id:'qg',name:'Ферзевый гамбит',moves:'1.d4 d5 2.c4',url:'https://lichess.org/opening/Queens_Gambit',hint:'Давление на d5, развитие Кc3 и Сg5, позже — атака меньшинства или e4.'}
+ ],
+ e4:[
+  {id:'e5',name:'1…e5 — открытые дебюты',moves:'1.e4 e5',url:'https://lichess.org/opening/Kings_Pawn_Game',hint:'Знайте ответы на Итальянскую, Шотландскую и гамбиты. Не спешите с …f6 и ранним выходом ферзя.'},
+  {id:'caro',name:'Защита Каро-Канн',moves:'1.e4 c6 2.d4 d5',url:'https://lichess.org/opening/Caro-Kann_Defense',hint:'Надёжная структура; белопольный слон выходит до …e6.'},
+  {id:'sicilian',name:'Сицилианская защита',moves:'1.e4 c5',url:'https://lichess.org/opening/Sicilian_Defense',hint:'Острая игра. Выберите одну систему и обязательно выучите ответы на 2.c3 и 2.Кc3.'},
+  {id:'french',name:'Французская защита',moves:'1.e4 e6 2.d4 d5',url:'https://lichess.org/opening/French_Defense',hint:'Подрывы центра ходами …c5 и …f6; плохой белопольный слон — главная проблема.'},
+  {id:'scandi',name:'Скандинавская защита',moves:'1.e4 d5',url:'https://lichess.org/opening/Scandinavian_Defense',hint:'Меньше теории: ферзь уходит на a5 или d6, слон выходит до …e6.'}
+ ],
+ d4:[
+  {id:'qgd',name:'Ферзевый гамбит отказанный',moves:'1.d4 d5 2.c4 e6',url:'https://lichess.org/opening/Queens_Gambit_Declined',hint:'Прочный центр на d5; освобождающие ходы …c5 или …e5.'},
+  {id:'slav',name:'Славянская защита',moves:'1.d4 d5 2.c4 c6',url:'https://lichess.org/opening/Slav_Defense',hint:'Слон c8 выходит наружу до …e6; крепкая пешечная цепь.'},
+  {id:'kid',name:'Староиндийская защита',moves:'1.d4 Кf6 2.c4 g6',url:'https://lichess.org/opening/Kings_Indian_Defense',hint:'Уступаем центр, чтобы подорвать его ходами …e5 или …c5; часто атака на королевском фланге.'},
+  {id:'dutch',name:'Голландская защита',moves:'1.d4 f5',url:'https://lichess.org/opening/Dutch_Defense',hint:'Контроль поля e4, острая игра. Следите за диагональю h5–e8.'}
+ ]
+};
+const PLAT={
+ chesscom:{name:'Chess.com',play:'https://www.chess.com/play/online',an:'https://www.chess.com/analysis'},
+ lichess:{name:'Lichess',play:'https://lichess.org/',an:'https://lichess.org/analysis'}
+};
+const BUDGET={30:.45,45:.7,60:1};
+const KIND={idea:'Теория',puz:'Тактика',end:'Эндшпиль',game:'Партия',notes:'Журнал',an:'Разбор',habit:'Привычка',open:'Дебют',master:'Партия мастера',review:'Итог',test:'Тест'};
+const DAYTYPE=['Новая тема','Игровой день','Разбор','Дебют и партия','Разбор и эндшпиль','Игровой день','Итог недели'];
+const EXAMTYPE=['Экзамен: тактика','Экзамен: партия','Работа над ошибками','Экзамен: партия','Экзамен: эндшпиль','Итог этапа'];
+
+function themeUrl(slug){
+  if(slug==='mix') return 'https://lichess.org/training';
+  if(slug==='dashboard') return 'https://lichess.org/training/dashboard/30';
+  return 'https://lichess.org/training/'+slug;
+}
+function repById(list,id){return REP[list].find(r=>r.id===id)||REP[list][0];}
+
+let planCache=new Map(), planKey='';
+function dayPlan(d){
+  const p=prof();
+  const key=[p.minutes,p.platform,p.white,p.e4,p.d4,p.goal].join('|');
+  if(key!==planKey){planCache.clear();planKey=key;}
+  if(planCache.has(d)) return planCache.get(d);
+  const st=Math.floor((d-1)/90), s=(d-1)%90, S_=STAGES[st];
+  const f=BUDGET[p.minutes]||1, fast=p.minutes<=30;
+  const tc=fast?'10+5':'15+10', gm=fast?25:35;
+  const sc=m=>Math.max(5,Math.round(m*f/5)*5);
+  const sn=n=>Math.max(4,Math.round(n*f));
+  const plat=PLAT[p.platform]||PLAT.chesscom;
+  const game=(t)=>({k:'game',min:gm,t:t||('Партия '+tc+' в рапид'),x:S_.game+' Обычно партия '+tc+' занимает '+gm+'–'+(gm+15)+' минут.',href:plat.play,hl:'Играть на '+plat.name,act:'game'});
+  const notes=()=>({k:'notes',min:sc(10),t:'Запишите партию в журнал',x:'Сразу после партии и без движка: результат, был ли зевок и где, по-вашему, была главная ошибка.',act:'game'});
+  const analyze=(m,fresh)=>({k:'an',min:sc(m),t:fresh?'Разбор по горячим следам':'Разбор последней партии',
+    x:fresh?'Пройдите партию сами, движок включайте только на ключевых моментах. Запишите одну мысль.':'Сначала без движка: найдите 3 момента, где можно было сыграть лучше. Потом проверьте движком и отметьте партию разобранной.',
+    href:plat.an,hl:'Доска анализа',act:'analyze'});
+  const habit=()=>({k:'habit',min:5,t:'Одно правило из ошибки',x:'Сформулируйте правило из разбора, например «перед ходом конём проверяю, куда он прыгнет дальше». Прочитайте его перед следующей партией.'});
+  const storm=()=>({k:'puz',min:sc(10),t:'Puzzle Storm: 3 минуты на скорость',x:'Две-три попытки. Рекорд растёт вместе с узнаванием шаблонов.',href:'https://lichess.org/storm',hl:'Puzzle Storm'});
+  let tasks=[], type, W_=null, w=-1, dow=-1, ex=-1;
+  if(s<84){
+    w=Math.floor(s/7); dow=s%7; W_=WEEKS[st][w]; type=DAYTYPE[dow];
+    const which=w%3, rep=which===0?repById('white',p.white):which===1?repById('e4',p.e4):repById('d4',p.d4);
+    const side=which===0?'Белыми:':which===1?'Против 1.e4:':'Против 1.d4:';
+    const puz=(n,m,label)=>({k:'puz',min:sc(m),n:sn(n),t:(label||('Задачи «'+W_.t+'»'))+' — '+sn(n)+' шт.',
+      x:label?'Короткая разминка по теме недели, чтобы глаз привык к шаблону.':'Без спешки: найдите ход, проверьте ответ соперника и только потом двигайте. Ошиблись — разберите, почему.',
+      href:themeUrl(W_.p),hl:'Задачи на Lichess'});
+    const end=(m,again)=>({k:'end',min:sc(m),t:(again?'Закрепление: ':'Эндшпиль: ')+W_.end,
+      x:W_.ei+(again?' Сыграйте позицию против компьютера ещё раз, на этот раз без подсказок.':' Найдите урок в «Практике» Lichess, затем сыграйте позицию против компьютера.'),
+      href:'https://lichess.org/practice',hl:'Практика Lichess'});
+    const opening=(m)=>({k:'open',min:sc(m),t:'Дебют: '+rep.name,x:side+' '+rep.moves+'. '+S_.open+' '+rep.hint,href:rep.url,hl:'Дебют на Lichess'});
+    const master=()=>{const M=MASTERS[w];return M[0]?
+      {k:'master',min:sc(30),t:'Партия мастера: '+M[0],x:'Закройте ходы и угадывайте ход победителя, прежде чем открыть следующий. Запишите 2–3 момента, где ваш ход отличался, и подумайте, почему мастер сыграл иначе.',href:'https://lichess.org/study/search?q='+encodeURIComponent(M[1]),hl:'Найти партию'}:
+      {k:'master',min:sc(30),t:'Партия мастеров в вашем дебюте',x:'Откройте свой дебют, вкладку «Мастера», выберите партию и разыграйте её, угадывая ходы победителя.',href:repById('white',p.white).url,hl:'Дебют на Lichess'};};
+    switch(dow){
+      case 0: tasks=[{k:'idea',min:5,t:'Идея недели: '+W_.t,x:W_.idea},puz(15,25),st===2?master():end(25)]; break;
+      case 1: tasks=[puz(8,10,'Разминка'),game(),notes()]; break;
+      case 2: tasks=[analyze(30),puz(12,20),habit()]; break;
+      case 3: tasks=[opening(20),game()]; break;
+      case 4: tasks=[analyze(20),end(20,st!==2),puz(10,15)]; break;
+      case 5: tasks=[puz(5,5,'Разминка'),game(),analyze(15,true)]; break;
+      case 6: tasks=[st===3&&w===1?{k:'puz',min:sc(10),t:'Тренажёр координат',x:'Две-три серии. Цель — называть поле, не задумываясь.',href:'https://lichess.org/training/coordinate',hl:'Координаты на Lichess'}:storm(),
+        {k:'review',min:sc(15),t:'Итог недели',x:'Запишите текущий рейтинг, посчитайте зевки за неделю в журнале и решите: тема «'+W_.t+'» усвоена? Если нет — берите её задачи в разминки следующей недели.',act:'rating'}]; break;
+    }
+  } else {
+    ex=s-84; type=EXAMTYPE[ex];
+    const ends=[0,4,8].map(i=>WEEKS[st][i].end).join(', ');
+    switch(ex){
+      case 0: tasks=[{k:'test',min:sc(25),t:'Тест: Puzzle Streak',x:'Решайте задачи подряд до первой ошибки. Запишите результат — в следующем этапе сравните.',href:'https://lichess.org/streak',hl:'Puzzle Streak',act:'value'},
+        {k:'puz',min:sc(20),n:sn(12),t:'Смешанная тактика этапа — '+sn(12)+' шт.',x:'Задачи без темы. Как в партии: сначала поймите, что происходит, потом ищите удар.',href:'https://lichess.org/training',hl:'Задачи на Lichess'}]; break;
+      case 1: tasks=[game('Экзаменационная партия '+tc),analyze(25)]; break;
+      case 2: tasks=[{k:'review',min:sc(30),t:'Журнал ошибок этапа',x:'Просмотрите разборы всех партий этапа. Какие ошибки повторяются? Выпишите три главные.',act:'journal'},
+        {k:'puz',min:sc(20),n:sn(12),t:'Задачи на вашу слабую тему — '+sn(12)+' шт.',x:'Панель задач Lichess показывает темы, где вы ошибаетесь чаще.',href:'https://lichess.org/training/dashboard/30',hl:'Панель задач'}]; break;
+      case 3: tasks=[game('Экзаменационная партия '+tc),analyze(20)]; break;
+      case 4: tasks=[{k:'end',min:sc(40),t:'Эндшпильный экзамен',x:'Сыграйте против компьютера три позиции этапа: '+ends+'. Цель — выиграть или удержать каждую с первой попытки.',href:'https://lichess.org/practice',hl:'Практика Lichess'},storm()]; break;
+      case 5: tasks=d===PLAN_DAYS?
+        [{k:'review',min:sc(15),t:'Итог года',x:'Запишите рейтинг и сравните с первым днём: рейтинг, зевки, число разобранных партий. Цель была — '+p.goal+'.',act:'rating'},game('Финальная партия года')]:
+        [{k:'review',min:sc(15),t:'Итог этапа',x:'Запишите рейтинг и сравните с линией цели на графике. Отстаёте — не паникуйте: на этих рейтингах рост идёт ступенями.',act:'rating'},game('Праздничная партия '+tc)]; break;
+    }
+  }
+  const plan={d,st,w,dow,ex,type,week:W_,tasks,minUrl:W_?themeUrl(W_.p):'https://lichess.org/training'};
+  planCache.set(d,plan);
+  return plan;
+}
+
+/* ---------------- state & storage ---------------- */
+const VIEWS=['today','plan','games','awards','setup'];
+const DOCS=['profile','progress','games','ratings'];
+const LSK='doroga2000:v1:';
+const defProfile={set:false,platform:'chesscom',rating:null,goal:2000,minutes:60,start:todayYmd(),white:'italian',e4:'e5',d4:'qgd'};
+const S={view:'today',viewDay:null,profile:null,progress:{days:{}},games:{list:[]},ratings:{list:[]},mode:'pending',confirmDel:null,confirmReset:false};
+function lsGet(k){try{const v=localStorage.getItem(LSK+k);return v?JSON.parse(v):null;}catch(e){return null;}}
+function lsSet(k,v){try{localStorage.setItem(LSK+k,JSON.stringify(v));}catch(e){}}
+function prof(){return S.profile||defProfile;}
+function sanitize(){
+  if(!S.progress||typeof S.progress!=='object') S.progress={days:{}};
+  if(!S.progress.days||typeof S.progress.days!=='object') S.progress.days={};
+  if(!S.games||!Array.isArray(S.games.list)) S.games={list:[]};
+  if(!S.ratings||!Array.isArray(S.ratings.list)) S.ratings={list:[]};
+  if(S.profile&&typeof S.profile!=='object') S.profile=null;
+  if(S.profile) S.profile=Object.assign({},defProfile,S.profile);
+}
+DOCS.forEach(n=>{const v=lsGet(n);if(v) S[n]=v;});
+sanitize();
+
+let db=null, uid=null;
+const refs={}, wq={}, pendingLocal=new Set();
+function hasData(n){
+  if(n==='profile') return !!S.profile;
+  if(n==='progress') return Object.keys(S.progress.days||{}).length>0;
+  return (S[n].list||[]).length>0;
+}
+function persist(n){
+  lsSet(n,S[n]);
+  if(S.mode==='pending'){pendingLocal.add(n);return;}
+  if(S.mode!=='db') return;
+  const q=wq[n]||(wq[n]={retries:0});
+  q.dirty=true; clearTimeout(q.timer); q.timer=setTimeout(()=>flush(n),350);
+}
+async function flush(n){
+  const q=wq[n]; if(!q||q.inflight||!q.dirty) return;
+  q.dirty=false; q.inflight=true;
+  try{ await refs[n].set(clone(S[n])); q.retries=0; }
+  catch(e){
+    const code=e&&e.code;
+    if(code==='unavailable'&&q.retries<1){q.retries++;q.dirty=true;setTimeout(()=>flush(n),1200+Math.random()*1200);}
+    else if(code==='quota_exceeded'){toast('Хранилище заполнено. Удалите старые партии из журнала, чтобы сохранять новые.');}
+    else if(code==='invalid_argument'||code==='not_granted'||code==='revoked'||code==='capability_disabled'){S.mode='local';renderFoot();toast('Не удалось сохранить в аккаунт — прогресс сохраняется в этом браузере.');}
+    else {console.warn('save failed',e);}
+  }
+  finally{ q.inflight=false; if(q.dirty) flush(n); }
+}
+function busy(n){const q=wq[n];return !!(q&&(q.inflight||q.dirty));}
+async function connect(){
+  const C=window.claude;
+  if(!C||typeof C.use!=='function'){S.mode='local';renderFoot();return;}
+  let _db=null,_user=null,id=null;
+  try{ const r=await Promise.all([C.use('db'),C.use('user')]); _db=r[0]; _user=r[1]; }catch(e){}
+  try{ id=_user?await _user.id():null; }catch(e){ id=null; }
+  if(!_db||!id){S.mode='local';renderFoot();return;}
+  db=_db; uid=id; S.mode='db'; renderFoot();
+  DOCS.forEach(n=>{
+    refs[n]=db.doc('data/users/'+uid+'/'+n);
+    let migrated=false;
+    if(pendingLocal.has(n)){ persist(n); migrated=true; }
+    refs[n].onSnapshot(snap=>{
+      if(busy(n)||snap.metadata.hasPendingWrites) return;
+      if(snap.exists){
+        S[n]=clone(snap.data()); sanitize(); lsSet(n,S[n]);
+        achQuiet=true; scheduleRender();
+      } else if(!snap.metadata.fromCache && !migrated && hasData(n)){
+        migrated=true; persist(n);
+      }
+    },err=>{console.warn('snapshot',n,err);});
+  });
+}
+function renderFoot(){
+  const el=$('#storeNote'); if(!el) return;
+  el.textContent=S.mode==='db'?'Прогресс сохраняется в вашем аккаунте Claude и виден только вам.':S.mode==='local'?'Прогресс сохраняется только в этом браузере.':'Подключаю хранилище…';
+}
+
+/* ---------------- derived numbers ---------------- */
+function dayRec(d){return S.progress.days[d]||null;}
+function doneIdx(d){const r=dayRec(d);if(!r||!Array.isArray(r.t)) return [];const n=dayPlan(d).tasks.length;return r.t.filter(i=>i>=0&&i<n);}
+function dayStatus(d){
+  const r=dayRec(d), n=dayPlan(d).tasks.length, k=doneIdx(d).length;
+  if(k>=n) return 'done';
+  if(r&&r.m) return 'min';
+  if(k>0) return 'part';
+  return 'none';
+}
+const okDay=d=>{const s=dayStatus(d);return s==='done'||s==='min';};
+function gamesSorted(){return S.games.list.slice().sort((a,b)=>a.d===b.d?(a.id<b.id?-1:1):(a.d<b.d?-1:1));}
+function startRating(){
+  const p=prof(); if(p.rating) return p.rating;
+  const s=ratingPoints(); return s.length?s[0].v:null;
+}
+function ratingPoints(){
+  const pts=S.ratings.list.filter(r=>r&&r.v).map(r=>({d:r.d,v:+r.v,id:r.id||''}));
+  S.games.list.forEach(g=>{if(g.me) pts.push({d:g.d,v:+g.me,id:g.id});});
+  return pts.sort((a,b)=>a.d===b.d?(a.id<b.id?-1:1):(a.d<b.d?-1:1));
+}
+function currentRating(){const s=ratingPoints();return s.length?s[s.length-1].v:(prof().rating||null);}
+function scheduleAt(d){const a=prof().rating||startRating();if(a==null) return null;return Math.round(a+(prof().goal-a)*Math.max(0,Math.min(PLAN_DAYS,d))/PLAN_DAYS);}
+function computeStats(){
+  const today=todayIdx(), last=Math.min(PLAN_DAYS,today);
+  let daysDone=0,daysMin=0,puzzles=0,xp=0;
+  for(let d=1;d<=PLAN_DAYS;d++){
+    const r=dayRec(d); if(!r) continue;
+    const plan=dayPlan(d), idx=doneIdx(d);
+    idx.forEach(i=>{const t=plan.tasks[i];xp+=t.min;if(t.n) puzzles+=t.n;});
+    if(idx.length>=plan.tasks.length){daysDone++;xp+=25;}
+    else if(r.m){daysMin++;puzzles+=10;xp+=15;}
+  }
+  let streak=0;
+  if(last>=1){let d=okDay(last)?last:last-1;while(d>=1&&okDay(d)){streak++;d--;}}
+  let best=0,run=0;for(let d=1;d<=last;d++){if(okDay(d)){run++;best=Math.max(best,run);}else run=0;}
+  const gs=gamesSorted();
+  const wins=gs.filter(g=>g.r==='W').length, draws=gs.filter(g=>g.r==='D').length, losses=gs.filter(g=>g.r==='L').length;
+  const analyzed=gs.filter(g=>g.a).length;
+  let nb=0,nbBest=0;gs.forEach(g=>{if(!g.b){nb++;nbBest=Math.max(nbBest,nb);}else nb=0;});
+  xp+=gs.length*20+analyzed*15;
+  const cur=currentRating(), st=startRating();
+  const stageDone=[90,180,270,360].map(d=>dayStatus(d)==='done');
+  let forkWeek=true;for(let d=8;d<=14;d++) if(dayStatus(d)!=='done') forkWeek=false;
+  return {today,daysDone,daysMin,puzzles,xp,streak,best,games:gs.length,wins,draws,losses,analyzed,
+    noBlunder:gs.filter(g=>!g.b).length,nbBest,gain:(cur!=null&&st!=null)?cur-st:0,cur,start:st,stageDone,forkWeek,goal:prof().goal};
+}
+const RANKS=[[1,'Новичок'],[3,'III юношеский'],[6,'II юношеский'],[10,'I юношеский'],[15,'III разряд'],[21,'II разряд'],[28,'I разряд'],[36,'КМС'],[45,'Мастер плана']];
+const XP_LVL=600;
+function levelOf(xp){const lv=Math.floor(xp/XP_LVL)+1;let rank=RANKS[0][1];RANKS.forEach(r=>{if(lv>=r[0]) rank=r[1];});return {lv,rank,into:xp%XP_LVL};}
+const ACH=[
+ {id:'link',g:'♙',t:'На связи',x:'Записать первую партию в журнал',ok:s=>s.games>=1},
+ {id:'first',g:'♙',t:'Дебют сыгран',x:'Выполнить первый день плана целиком',ok:s=>s.daysDone>=1},
+ {id:'s3',g:'♘',t:'Разогрев',x:'3 дня подряд',ok:s=>s.best>=3},
+ {id:'s7',g:'♘',t:'Неделя без пропусков',x:'7 дней подряд',ok:s=>s.best>=7},
+ {id:'min',g:'♙',t:'Лучше, чем ничего',x:'Спасти серию минимумом дня',ok:s=>s.daysMin>=1},
+ {id:'fork',g:'♘',t:'Вилочник',x:'Пройти все 7 дней недели «Вилка»',ok:s=>s.forkWeek},
+ {id:'p100',g:'♗',t:'Сотня',x:'100 решённых задач',ok:s=>s.puzzles>=100},
+ {id:'an10',g:'♗',t:'Разборщик',x:'Разобрать 10 партий',ok:s=>s.analyzed>=10},
+ {id:'nb5',g:'♖',t:'Перестал зевать',x:'5 партий подряд без зевков',ok:s=>s.nbBest>=5},
+ {id:'w10',g:'♖',t:'Десять побед',x:'Выиграть 10 партий',ok:s=>s.wins>=10},
+ {id:'s30',g:'♖',t:'Железная воля',x:'30 дней подряд',ok:s=>s.best>=30},
+ {id:'r100',g:'♗',t:'+100',x:'Поднять рейтинг на 100 пунктов от старта',ok:s=>s.gain>=100},
+ {id:'p1000',g:'♕',t:'Тысяча задач',x:'1000 решённых задач',ok:s=>s.puzzles>=1000},
+ {id:'an50',g:'♕',t:'Аналитик',x:'Разобрать 50 партий',ok:s=>s.analyzed>=50},
+ {id:'r300',g:'♕',t:'+300',x:'Поднять рейтинг на 300 пунктов',ok:s=>s.gain>=300},
+ {id:'s100',g:'♕',t:'Сто дней',x:'100 дней подряд',ok:s=>s.best>=100},
+ {id:'st1',g:'♙',t:'Этап I пройден',x:'Сдать экзамен этапа «Перестать зевать»',ok:s=>s.stageDone[0]},
+ {id:'st2',g:'♘',t:'Этап II пройден',x:'Сдать экзамен этапа «Видеть тактику»',ok:s=>s.stageDone[1]},
+ {id:'st3',g:'♗',t:'Этап III пройден',x:'Сдать экзамен этапа «Понимать позицию»',ok:s=>s.stageDone[2]},
+ {id:'st4',g:'♕',t:'Год позади',x:'Пройти все 360 дней',ok:s=>s.stageDone[3]},
+ {id:'goal',g:'♔',t:'Цель',x:'Достичь целевого рейтинга',ok:s=>s.cur!=null&&s.cur>=s.goal}
+];
+let achSeen=null, achQuiet=true;
+function checkAch(stats){
+  const on=new Set(ACH.filter(a=>a.ok(stats)).map(a=>a.id));
+  if(achSeen&&!achQuiet){
+    const fresh=ACH.filter(a=>on.has(a.id)&&!achSeen.has(a.id));
+    if(fresh.length) toast(G(fresh[0].g)+'Достижение: '+esc(fresh[0].t)+(fresh.length>1?' и ещё '+(fresh.length-1):''),true);
+  }
+  achSeen=on; achQuiet=false; return on;
+}
+
+/* ---------------- rendering ---------------- */
+let renderPending=false;
+function isEditing(){const a=document.activeElement;return !!(a&&$('#view').contains(a)&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName));}
+function scheduleRender(){if(isEditing()){renderPending=true;return;}render();}
+document.addEventListener('focusout',()=>{if(renderPending){setTimeout(()=>{if(!isEditing()){renderPending=false;render();}},0);}});
+
+function render(){
+  const stats=computeStats();
+  checkAch(stats);
+  const pend=S.games.list.filter(g=>!g.a).length;
+  const tabs=[['today','Сегодня'],['plan','План'],['games','Партии'],['awards','Награды'],['setup',prof().set?'Настройка':'Тест']];
+  $('#tabs').innerHTML=tabs.map(([v,l])=>'<button class="tab" data-act="tab" data-v="'+v+'"'+(S.view===v?' aria-current="page"':'')+'>'+l+(v==='games'&&pend?'<span class="count" aria-label="ждут разбора">'+pend+'</span>':'')+'</button>').join('');
+  const v=$('#view');
+  if(S.view==='plan') v.innerHTML=viewPlan(stats);
+  else if(S.view==='games') v.innerHTML=viewGames(stats);
+  else if(S.view==='awards') v.innerHTML=viewAwards(stats);
+  else if(S.view==='setup') v.innerHTML=viewSetup();
+  else v.innerHTML=viewToday(stats);
+  renderFoot();
+}
+
+function viewToday(stats){
+  const p=prof(), today=stats.today;
+  const d=S.viewDay||clampDay(today);
+  const plan=dayPlan(d), st=STAGES[plan.st], r=dayRec(d)||{}, done=new Set(doneIdx(d));
+  const isFuture=d>today, status=dayStatus(d);
+  const total=plan.tasks.reduce((a,t)=>a+t.min,0), doneMin=plan.tasks.reduce((a,t,i)=>a+(done.has(i)?t.min:0),0);
+  let h='';
+  if(!p.set) h+='<div class="banner"><p><b>Сначала короткий тест</b>Как в видео: нейросеть спросила, сколько у автора времени и чем он играет, и только потом расписала год. Укажите рейтинг, площадку и дебюты — план подстроится.</p><button class="btn" data-act="tab" data-v="setup">Пройти тест</button></div>';
+  if(today<1) h+='<div class="notice">План стартует '+esc(fmtLong.format(utc(p.start)))+'. Пока можно посмотреть, что ждёт в первые дни.</div>';
+  if(today>PLAN_DAYS) h+='<div class="notice">360 дней позади. Итоги — в разделах «Партии» и «Награды».</div>';
+  const chipWeek=plan.ex>=0?'<span class="chip exam">Экзамен · день '+(plan.ex+1)+' из 6</span>':'<span class="chip">Неделя '+(plan.w+1)+' из 12</span>';
+  const title=plan.ex>=0?(d===PLAN_DAYS?'Финал года':'Экзамен этапа'):plan.week.t;
+  h+='<section class="hero">'+
+    '<div class="daynum-wrap"><span class="eyebrow">День</span><span class="daynum">'+d+'</span><span class="of mono">из '+PLAN_DAYS+'</span></div>'+
+    '<div class="hero-meta"><div class="chips"><span class="chip stage">'+G(st.g)+'Этап '+st.roman+' · '+st.name+'</span>'+chipWeek+'<span class="chip">'+esc(plan.type)+'</span></div>'+
+    '<h1>'+esc(title)+'</h1>'+
+    '<p class="hero-sub mono">'+esc(fmtLong.format(utc(dateOfDay(d))))+' · ≈ '+total+' мин · сделано '+doneMin+' из '+total+'</p></div>'+
+    '<div class="daynav"><button class="btn" data-act="prev" aria-label="Предыдущий день"'+(d<=1?' disabled':'')+'>‹</button>'+
+    '<button class="btn" data-act="today-day"'+(d===clampDay(today)?' disabled':'')+'>Сегодня</button>'+
+    '<button class="btn" data-act="next" aria-label="Следующий день"'+(d>=PLAN_DAYS?' disabled':'')+'>›</button></div>'+
+  '</section>'+
+  '<div class="dayprog" aria-hidden="true"><span style="width:'+(total?Math.round(doneMin/total*100):0)+'%"></span></div>';
+
+  h+='<div class="desk"><div>';
+  h+='<div class="rules">'+
+     (plan.week?'<div class="rule theme"><span class="eyebrow">Тема недели · '+esc(plan.week.t)+'</span><p>'+esc(plan.week.idea)+'</p></div>':
+       '<div class="rule theme"><span class="eyebrow">Экзамен этапа</span><p>Шесть дней проверки: тактика, две партии с глубоким разбором, эндшпили и итог. По ним видно, что усвоено.</p></div>')+
+     '<div class="rule"><span class="eyebrow">Правило этапа</span><p>'+esc(st.habit)+'</p></div></div>';
+  if(isFuture) h+='<div class="notice" style="margin-bottom:10px">Этот день наступит '+esc(fmtLong.format(utc(dateOfDay(d))))+'. Отметить задания можно будет в этот день.</div>';
+  else if(d<today&&status!=='done') h+='<div class="notice" style="margin-bottom:10px">Прошедший день — отметки можно поставить задним числом.</div>';
+  h+='<div class="tasks">';
+  plan.tasks.forEach((t,i)=>{
+    const on=done.has(i);
+    h+='<article class="task'+(on?' done':'')+'">'+
+      '<button class="check" data-act="toggle" data-d="'+d+'" data-i="'+i+'" aria-pressed="'+on+'" aria-label="'+(on?'Снять отметку: ':'Отметить выполненным: ')+esc(t.t)+'"'+(isFuture?' disabled':'')+'>'+CHECK+'</button>'+
+      '<div><div class="task-head"><div><span class="kind k-'+t.k+'">'+(i+1)+' · '+KIND[t.k]+'</span><span class="task-title">'+esc(t.t)+'</span></div><span class="mins">'+t.min+' мин</span></div>'+
+      '<p class="task-x">'+esc(t.x)+'</p>'+taskActions(t,d,i,r,isFuture)+'</div></article>';
+  });
+  h+='</div>';
+  if(status!=='done'){
+    const mOn=!!r.m;
+    h+='<div class="minimum"><button class="check min" data-act="min" data-d="'+d+'" aria-pressed="'+mOn+'" aria-label="Минимум дня выполнен"'+(isFuture?' disabled':'')+'>'+CHECK+'</button>'+
+       '<p><b>Нет часа сегодня?</b> Минимум дня — 10 задач по теме, около 15 минут. Серия не прервётся. <a href="'+plan.minUrl+'" target="_blank" rel="noopener">Открыть задачи ↗</a></p></div>';
+  }
+  h+='</div><aside class="side">'+sideCards(stats)+'</aside></div>';
+  return h;
+}
+function taskActions(t,d,i,r,isFuture){
+  let a='';
+  if(t.href) a+='<a class="btn'+(t.k==='game'?' primary':'')+'" href="'+t.href+'" target="_blank" rel="noopener">'+esc(t.hl)+' <span class="ext">↗</span></a>';
+  if(!isFuture&&t.k!=='idea'&&t.k!=='habit') a+='<button class="btn ghost" data-act="timer" data-d="'+d+'" data-i="'+i+'" aria-label="Запустить таймер на '+t.min+' минут">▶ '+t.min+':00</button>';
+  if(t.act==='game') a+='<button class="btn" data-act="game-new">Записать партию</button>';
+  if(t.act==='rating') a+='<button class="btn" data-act="rating-new">Записать рейтинг</button>';
+  if(t.act==='journal') a+='<button class="btn" data-act="tab" data-v="games">Открыть журнал</button>';
+  if(t.act==='analyze'){
+    const g=gamesSorted().filter(x=>!x.a).pop();
+    a+=g?'<button class="btn" data-act="an-mark" data-id="'+esc(g.id)+'">Отметить разобранной: '+esc(fmtShort.format(utc(g.d)))+', '+resWord(g.r).toLowerCase()+'</button>':'<span class="hint">Партий без разбора нет — сначала запишите партию.</span>';
+  }
+  if(t.act==='value') a+='<label class="inline-in" for="v-'+d+'">Результат<input id="v-'+d+'" type="number" inputmode="numeric" min="0" max="999" data-input="value" data-d="'+d+'" value="'+(r.v!=null?esc(r.v):'')+'"'+(isFuture?' disabled':'')+'></label>';
+  return a?'<div class="task-actions">'+a+'</div>':'';
+}
+function resWord(r){return r==='W'?'Победа':r==='D'?'Ничья':'Поражение';}
+function sideCards(s){
+  const p=prof(), plat=PLAT[p.platform]||PLAT.chesscom;
+  let h='<div class="card"><div class="card-h"><span class="eyebrow">Рейтинг · рапид · '+plat.name+'</span></div>';
+  if(s.cur==null){
+    h+='<p class="small">Укажите текущий рейтинг — появится линия цели и темп, который нужен до '+p.goal+'.</p><div class="task-actions"><button class="btn" data-act="tab" data-v="setup">Указать рейтинг</button></div>';
+  } else {
+    const st=s.start??s.cur, span=Math.max(1,p.goal-st);
+    const pct=Math.max(0,Math.min(100,(s.cur-st)/span*100));
+    const day=Math.max(0,Math.min(PLAN_DAYS,s.today)), sched=scheduleAt(day);
+    const tick=Math.max(0,Math.min(100,(sched-st)/span*100));
+    const weeksLeft=Math.max(1,(PLAN_DAYS-day)/7), need=Math.ceil((p.goal-s.cur)/weeksLeft);
+    h+='<div class="rnow"><span class="big mono">'+s.cur+'</span><span class="to">→ '+p.goal+'</span></div>'+
+       '<div class="rbar" title="Отметка — где по графику нужно быть сегодня"><span style="width:'+pct.toFixed(1)+'%"></span><i style="left:calc('+tick.toFixed(1)+'% - 1px)"></i></div>'+
+       '<p class="small">'+(s.cur>=p.goal?'Цель достигнута.':'По графику на сегодня — '+sched+'. Осталось '+(p.goal-s.cur)+', это ≈ +'+need+' в неделю.')+'</p>'+
+       '<div class="task-actions"><button class="btn" data-act="rating-new">Записать рейтинг</button></div>';
+  }
+  h+='</div>';
+  const last=Math.min(PLAN_DAYS,s.today);
+  let strip='';for(let d=last-13;d<=last;d++){strip+='<i class="'+(d>=1?dayStatus(d):'')+'" title="'+(d>=1?'День '+d:'')+'"></i>';}
+  h+='<div class="card"><div class="card-h"><span class="eyebrow">Серия</span><span class="small">лучшая: '+s.best+'</span></div>'+
+     '<div class="stat-row"><span class="big">'+s.streak+'</span><span class="small">'+plural(s.streak,'день','дня','дней')+' подряд</span></div><div class="strip" aria-hidden="true">'+strip+'</div></div>';
+  const L=levelOf(s.xp);
+  h+='<div class="card"><div class="card-h"><span class="eyebrow">Уровень '+L.lv+'</span><span class="small mono">'+s.xp+' XP</span></div>'+
+     '<div class="stat-row"><span style="font-family:var(--f-display);font-weight:500;font-size:20px">'+L.rank+'</span></div>'+
+     '<div class="xpbar"><span style="width:'+(L.into/XP_LVL*100).toFixed(1)+'%"></span></div><p class="small">До следующего уровня — '+(XP_LVL-L.into)+' XP. Задачи решено: '+s.puzzles+'.</p></div>';
+  const pend=s.games-s.analyzed;
+  h+='<div class="card"><div class="pending'+(pend?'':' zero')+'"><div><span class="eyebrow">Без разбора</span><p class="small">'+(pend?'Партии ждут разбора — без него рост медленнее.':(s.games?'Все партии разобраны.':'Запишите первую партию — получите «На связи».'))+'</p></div><span class="n">'+pend+'</span></div>'+
+     '<div class="task-actions"><button class="btn" data-act="game-new">Записать партию</button><button class="btn ghost" data-act="tab" data-v="games">Журнал</button></div></div>';
+  const on=ACH.filter(a=>achSeen&&achSeen.has(a.id));
+  h+='<div class="card"><div class="card-h"><span class="eyebrow">Награды</span><span class="small">'+on.length+' из '+ACH.length+'</span></div>'+
+     (on.length?'<div class="mini-ach">'+on.slice(-4).reverse().map(a=>'<span>'+G(a.g)+esc(a.t)+'</span>').join('')+'</div>':'<p class="small">Первая награда — за первую записанную партию.</p>')+
+     '<div class="task-actions"><button class="btn ghost" data-act="tab" data-v="awards">Все награды</button></div></div>';
+  return h;
+}
+
+function viewPlan(stats){
+  const today=stats.today;
+  let h='<div class="plan-head"><div><span class="eyebrow">360 дней · 4 этапа по 90 дней</span><h1>Весь план на доске</h1></div>'+
+    '<div class="legend"><span><i style="background:var(--sq-done)"></i>выполнен</span><span><i style="background:var(--sq-min)"></i>минимум</span><span><i style="background:var(--sq-part)"></i>частично</span><span><i style="background:var(--flag-soft)"></i>пропущен</span><span><i style="background:var(--sq-a);box-shadow:inset 0 0 0 2px var(--brass)"></i>сегодня</span></div></div>';
+  h+='<div class="stages">';
+  STAGES.forEach((st,si)=>{
+    const from=si*90+1, to=from+89;
+    let ok=0;for(let d=from;d<=to;d++) if(okDay(d)) ok++;
+    h+='<section class="stage"><div class="stage-h">'+G(st.g)+'<div><span class="eyebrow">Этап '+st.roman+' · дни '+from+'–'+to+'</span><h2>'+st.name+'</h2></div><span class="pct">'+Math.round(ok/90*100)+'%</span></div>'+
+       '<p class="goal">'+esc(st.goal)+'</p>';
+    for(let w=0;w<13;w++){
+      const exam=w===12, label=exam?'Экзамен этапа':WEEKS[si][w].t;
+      h+='<div class="wk'+(exam?' exam':'')+'"><div class="wk-l"><span class="mono">'+(exam?'Э':(w+1))+'</span><span>'+esc(label)+'</span></div><div class="sqs">';
+      for(let k=0;k<7;k++){
+        const off=w*7+k;
+        if(off>=90){h+='<span class="sq blank'+(((w+k)%2)?' b':'')+'"></span>';continue;}
+        const d=from+off, s=dayStatus(d);
+        let cls=s==='done'?'done':s==='min'?'min':s==='part'?'part':(d<today?'miss':'');
+        if(d===today) cls+=' today';
+        h+='<button class="sq '+cls+(((w+k)%2)?' b':'')+'" data-act="goto" data-d="'+d+'" title="День '+d+' · '+esc(dayPlan(d).type)+'" aria-label="День '+d+'"></button>';
+      }
+      h+='</div></div>';
+    }
+    h+='</section>';
+  });
+  h+='</div>';
+  return h;
+}
+
+function niceStep(r){const c=[25,50,100,200,250,500];for(const s of c) if(r<=s) return s;return 1000;}
+function chartSVG(stats){
+  const p=prof(), pts=ratingPoints().map(x=>({x:Math.max(0,Math.min(PLAN_DAYS,dayIndexOf(x.d))),v:x.v}));
+  const st=startRating();
+  if(st==null&&!pts.length) return '<div class="empty"><b>График появится после первой записи</b>Запишите партию с рейтингом после игры или просто текущий рейтинг.</div>';
+  const Wd=640,H=250,pl=46,pr=16,pt=16,pb=30;
+  const vals=pts.map(x=>x.v).concat([st??pts[0].v,p.goal]);
+  let lo=Math.min(...vals), hi=Math.max(...vals);
+  const step=niceStep(Math.max(1,(hi-lo)/4));
+  lo=Math.floor((lo-step*.25)/step)*step; hi=Math.ceil((hi+step*.25)/step)*step;
+  const X=d=>pl+d/PLAN_DAYS*(Wd-pl-pr), Y=v=>pt+(1-(v-lo)/(hi-lo))*(H-pt-pb);
+  let s='<svg class="chart" viewBox="0 0 '+Wd+' '+H+'" role="img" aria-label="Рейтинг по дням плана и линия цели">';
+  for(let v=lo;v<=hi;v+=step){s+='<line class="grid" x1="'+pl+'" x2="'+(Wd-pr)+'" y1="'+Y(v).toFixed(1)+'" y2="'+Y(v).toFixed(1)+'"/><text class="ax" x="'+(pl-8)+'" y="'+(Y(v)+4).toFixed(1)+'" text-anchor="end">'+v+'</text>';}
+  [90,180,270].forEach(d=>{s+='<line class="sep" x1="'+X(d).toFixed(1)+'" x2="'+X(d).toFixed(1)+'" y1="'+pt+'" y2="'+(H-pb)+'"/>';});
+  ['I','II','III','IV'].forEach((r,i)=>{s+='<text class="stl" x="'+X(i*90+45).toFixed(1)+'" y="'+(H-10)+'" text-anchor="middle">ЭТАП '+r+'</text>';});
+  if(st!=null){
+    s+='<line class="target" x1="'+X(0)+'" y1="'+Y(st).toFixed(1)+'" x2="'+X(PLAN_DAYS)+'" y2="'+Y(p.goal).toFixed(1)+'"/>';
+    s+='<text class="tlbl" x="'+(X(PLAN_DAYS)-4)+'" y="'+(Y(p.goal)-8).toFixed(1)+'" text-anchor="end">цель '+p.goal+'</text>';
+  }
+  const tday=Math.max(0,Math.min(PLAN_DAYS,stats.today));
+  s+='<line class="now" x1="'+X(tday).toFixed(1)+'" x2="'+X(tday).toFixed(1)+'" y1="'+pt+'" y2="'+(H-pb)+'"/>';
+  const line=(st!=null&&p.rating?[{x:0,v:st}]:[]).concat(pts);
+  if(line.length){
+    const path=line.map((q,i)=>(i?'L':'M')+X(q.x).toFixed(1)+' '+Y(q.v).toFixed(1)).join(' ');
+    const lastP=line[line.length-1];
+    s+='<path class="area" d="'+path+' L'+X(lastP.x).toFixed(1)+' '+(H-pb)+' L'+X(line[0].x).toFixed(1)+' '+(H-pb)+' Z"/>';
+    s+='<path class="line" d="'+path+'"/>';
+    s+='<circle class="dot" cx="'+X(lastP.x).toFixed(1)+'" cy="'+Y(lastP.v).toFixed(1)+'" r="5"/>';
+    const lx=Math.min(X(lastP.x)+8,Wd-pr-30);
+    s+='<text class="lbl" x="'+lx.toFixed(1)+'" y="'+(Y(lastP.v)-9).toFixed(1)+'">'+lastP.v+'</text>';
+  }
+  return s+'</svg>';
+}
+function viewGames(stats){
+  const gs=gamesSorted().reverse();
+  let h='<div class="plan-head"><div><span class="eyebrow">Журнал партий</span><h1>Партии и рейтинг</h1></div></div>';
+  h+='<div class="summary">'+
+    '<div class="sum"><span class="eyebrow">Партий</span><div class="v">'+stats.games+'</div></div>'+
+    '<div class="sum"><span class="eyebrow">+ / = / −</span><div class="v mono">'+stats.wins+'/'+stats.draws+'/'+stats.losses+'</div></div>'+
+    '<div class="sum"><span class="eyebrow">Без зевков</span><div class="v">'+(stats.games?Math.round(stats.noBlunder/stats.games*100)+'%':'—')+'</div></div>'+
+    '<div class="sum"><span class="eyebrow">Разобрано</span><div class="v">'+stats.analyzed+(stats.games?'<span class="small"> из '+stats.games+'</span>':'')+'</div></div></div>';
+  h+='<div class="card"><div class="card-h"><span class="eyebrow">Рейтинг по дням плана</span><span class="small">пунктир — линия цели</span></div><div class="chart-wrap">'+chartSVG(stats)+'</div></div>';
+  h+='<div class="games-tools"><button class="btn primary" data-act="game-new">Записать партию</button><button class="btn" data-act="rating-new">Записать рейтинг</button></div>';
+  if(!gs.length){
+    h+='<div class="glist"><div class="empty"><b>Здесь будут ваши партии</b>После каждой партии запишите результат, зевок и главную ошибку. Партии без разбора помечаются — их нужно разобрать на следующий день.</div></div>';
+    return h;
+  }
+  h+='<div class="glist">';
+  gs.forEach(g=>{
+    const link=/^https?:\/\//i.test(g.u||'')?'<a href="'+esc(g.u)+'" target="_blank" rel="noopener">партия ↗</a>':'';
+    const blunder=g.b===2?'<span class="tag flag">зевок фигуры</span>':g.b===1?'<span class="tag flag">зевок пешки</span>':'<span class="tag ok">без зевков</span>';
+    const armed=S.confirmDel===g.id;
+    h+='<div class="game"><span class="res '+esc(g.r)+'">'+resWord(g.r)+'</span>'+
+      '<div class="game-main"><div class="game-line"><b class="mono">'+esc(fmtShort.format(utc(g.d)))+'</b><span>'+(g.c==='b'?G('♚')+' чёрными':G('♔')+' белыми')+'</span>'+
+      (g.o?'<span>соперник <b class="mono">'+esc(g.o)+'</b></span>':'')+(g.me?'<span>рейтинг после <b class="mono">'+esc(g.me)+'</b></span>':'')+(g.op?'<span>'+esc(g.op)+'</span>':'')+'</div>'+
+      (g.e?'<p class="game-err">'+esc(g.e)+'</p>':'')+'<div class="game-line">'+blunder+(g.a?'<span class="tag ok">разобрана</span>':'<span class="tag flag">без разбора</span>')+link+'</div></div>'+
+      '<div class="game-act"><button class="btn'+(g.a?' ghost':'')+'" data-act="an-toggle" data-id="'+esc(g.id)+'">'+(g.a?'Снять разбор':'Разобрана')+'</button>'+
+      '<button class="btn warn'+(armed?' armed':'')+'" data-act="game-del" data-id="'+esc(g.id)+'">'+(armed?'Точно удалить?':'Удалить')+'</button></div></div>';
+  });
+  return h+'</div>';
+}
+function viewAwards(stats){
+  const L=levelOf(stats.xp);
+  let h='<div class="plan-head"><div><span class="eyebrow">Награды и уровень</span><h1>'+L.rank+' · уровень '+L.lv+'</h1></div></div>';
+  h+='<div class="card"><div class="card-h"><span class="eyebrow">Разряды плана</span><span class="small mono">'+stats.xp+' XP · '+XP_LVL+' XP за уровень</span></div>'+
+     '<p class="small">XP начисляется за минуты выполненных заданий, полные дни, записанные и разобранные партии.</p><div class="ranks">'+
+     RANKS.map((r,i)=>{const on=L.lv>=r[0], cur=on&&(!RANKS[i+1]||L.lv<RANKS[i+1][0]);return '<span class="rank'+(on?' on':'')+(cur?' cur':'')+'">'+r[1]+' · ур. '+r[0]+'</span>';}).join('')+'</div></div>';
+  h+='<div class="achs">'+ACH.map(a=>{const on=achSeen&&achSeen.has(a.id);const t=a.id==='goal'?'Цель '+stats.goal:a.t;
+    return '<div class="ach'+(on?'':' locked')+'">'+G(a.g)+'<div><b>'+esc(t)+'</b><span>'+esc(a.x)+'</span></div></div>';}).join('')+'</div>';
+  return h;
+}
+function viewSetup(){
+  const p=prof();
+  const seg=(name,opts,val)=>'<div class="seg">'+opts.map(([v,l])=>'<label class="seg-o"><input type="radio" name="'+name+'" id="su-'+name+'-'+v+'" value="'+v+'"'+(String(val)===String(v)?' checked':'')+'><span>'+l+'</span></label>').join('')+'</div>';
+  const sel=(id,list,val)=>'<select id="'+id+'">'+REP[list].map(r=>'<option value="'+r.id+'"'+(r.id===val?' selected':'')+'>'+esc(r.name)+'</option>').join('')+'</select>';
+  let h='<section class="setup"><div class="setup-intro"><span class="eyebrow">'+(p.set?'Настройка плана':'Тест перед стартом')+'</span>'+
+    '<h1>'+(p.set?'Подправьте план под себя':'Расскажите о себе — план подстроится')+'</h1>'+
+    '<p>Четыре этапа по 90 дней: «Перестать зевать», «Видеть тактику», «Понимать позицию», «Расчёт и турнирная форма». Каждый день — задачи, партии и разборы в пределах вашего времени.</p></div>';
+  h+='<form id="setupForm" class="card form" novalidate>'+
+    '<fieldset><legend>Где вы играете рапид?</legend>'+seg('pl',[['chesscom','Chess.com'],['lichess','Lichess']],p.platform)+'</fieldset>'+
+    '<div><div class="row2"><label class="field" for="su-rating">Текущий рейтинг в рапиде<input id="su-rating" type="number" inputmode="numeric" min="100" max="3200" placeholder="например, 800" value="'+(p.rating||'')+'"></label>'+
+    '<label class="field" for="su-goal">Цель<input id="su-goal" type="number" inputmode="numeric" min="200" max="3200" value="'+p.goal+'"></label></div>'+
+    '<p class="hint" style="margin-top:8px">Рейтинги на Lichess обычно выше, чем на Chess.com. Сравнивайте себя с собой на одной площадке. Нет рейтинга — оставьте поле пустым и запишите его после первых партий.</p></div>'+
+    '<fieldset><legend>Сколько времени в день?</legend>'+seg('min',[['60','60 минут'],['45','45 минут'],['30','30 минут']],p.minutes)+
+    '<p class="hint">60 минут — полный план. При 45 и 30 темы те же, задания короче; при 30 минутах партии идут с контролем 10+5. Один день в неделю лёгкий — около 25 минут.</p></fieldset>'+
+    '<fieldset><legend>Дебютный репертуар</legend><div class="row3">'+
+      '<label class="field" for="su-white">Белыми'+sel('su-white','white',p.white)+'</label>'+
+      '<label class="field" for="su-e4">Против 1.e4'+sel('su-e4','e4',p.e4)+'</label>'+
+      '<label class="field" for="su-d4">Против 1.d4'+sel('su-d4','d4',p.d4)+'</label></div>'+
+    '<p class="hint">Не знаете, что выбрать? Итальянская, 1…e5 и Ферзевый гамбит отказанный — надёжная классика с понятными идеями.</p></fieldset>'+
+    '<label class="field" for="su-start">Дата старта (день 1)<input id="su-start" type="date" value="'+esc(p.start)+'"></label>'+
+    '<div><button class="btn primary big" type="submit">'+(p.set?'Сохранить план':'Составить план на 360 дней')+'</button></div>'+
+  '</form>';
+  if(p.set||hasData('progress')||hasData('games')){
+    h+='<div class="card danger"><p>Начать заново с сегодняшнего дня: отметки, партии и записи рейтинга удалятся, настройки останутся.</p>'+
+       '<button class="btn warn'+(S.confirmReset?' armed':'')+'" data-act="reset">'+(S.confirmReset?'Да, всё удалить':'Начать заново')+'</button></div>';
+  }
+  return h+'</section>';
+}
+
+/* ---------------- actions ---------------- */
+function ensureProfile(){if(!S.profile){S.profile=clone(defProfile);persist('profile');}}
+function setView(v){S.view=v;S.confirmDel=null;S.confirmReset=false;try{history.replaceState(null,'','#'+v);}catch(e){}render();window.scrollTo(0,0);}
+function toggleTask(d,i){
+  if(d>todayIdx()) return;
+  ensureProfile();
+  const days=S.progress.days, r=days[d]||(days[d]={t:[]});
+  if(!Array.isArray(r.t)) r.t=[];
+  const k=r.t.indexOf(i); if(k>=0) r.t.splice(k,1); else r.t.push(i);
+  r.t.sort((a,b)=>a-b);
+  if(!r.t.length&&!r.m&&r.v==null) delete days[d];
+  persist('progress'); render();
+}
+function toggleMin(d){
+  if(d>todayIdx()) return;
+  ensureProfile();
+  const days=S.progress.days, r=days[d]||(days[d]={t:[]});
+  r.m=r.m?0:1;
+  if(!(r.t||[]).length&&!r.m&&r.v==null) delete days[d];
+  persist('progress'); render();
+}
+function newId(){return 'g'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-act]'); if(!b) return;
+  const act=b.dataset.act, d=+b.dataset.d, i=+b.dataset.i;
+  if(act!=='game-del'&&S.confirmDel){S.confirmDel=null;}
+  if(act!=='reset'&&S.confirmReset){S.confirmReset=false;}
+  switch(act){
+    case 'tab': setView(b.dataset.v); break;
+    case 'toggle': toggleTask(d,i); break;
+    case 'min': toggleMin(d); break;
+    case 'prev': S.viewDay=clampDay((S.viewDay||clampDay(todayIdx()))-1); render(); break;
+    case 'next': S.viewDay=clampDay((S.viewDay||clampDay(todayIdx()))+1); render(); break;
+    case 'today-day': S.viewDay=null; render(); break;
+    case 'goto': S.viewDay=d; setView('today'); break;
+    case 'timer': startTimer(d,i); break;
+    case 'game-new': openGameForm(); break;
+    case 'rating-new': openRatingForm(); break;
+    case 'an-mark': case 'an-toggle': {
+      const g=S.games.list.find(x=>x.id===b.dataset.id); if(!g) break;
+      g.a=act==='an-mark'?true:!g.a; persist('games'); render();
+      if(g.a) toast('Партия отмечена разобранной.');
+      break;}
+    case 'game-del': {
+      const id=b.dataset.id;
+      if(S.confirmDel===id){S.games.list=S.games.list.filter(x=>x.id!==id);S.confirmDel=null;persist('games');toast('Партия удалена.');}
+      else S.confirmDel=id;
+      render(); break;}
+    case 'reset':
+      if(S.confirmReset){
+        ensureProfile();
+        S.progress={days:{}};S.games={list:[]};S.ratings={list:[]};S.profile.start=todayYmd();S.confirmReset=false;S.viewDay=null;
+        ['progress','games','ratings','profile'].forEach(persist); achSeen=null; achQuiet=true;
+        planCache.clear(); toast('План начат заново. Сегодня — день 1.'); setView('today');
+      } else { S.confirmReset=true; render(); }
+      break;
+    case 'modal-close': closeModal(); break;
+    case 't-pause': timerPause(); break;
+    case 't-stop': timerStop(); break;
+    case 't-done': if(timer){const {d:td,i:ti}=timer;timerStop();const dn=new Set(doneIdx(td));if(!dn.has(ti)) toggleTask(td,ti);} break;
+  }
+});
+document.addEventListener('change',e=>{
+  const el=e.target;
+  if(el.dataset&&el.dataset.input==='value'){
+    const d=+el.dataset.d; if(d>todayIdx()) return;
+    ensureProfile();
+    const days=S.progress.days, r=days[d]||(days[d]={t:[]});
+    const v=el.value===''?null:Math.max(0,Math.min(999,Math.round(+el.value)));
+    if(v==null) delete r.v; else r.v=v;
+    if(!(r.t||[]).length&&!r.m&&r.v==null) delete days[d];
+    persist('progress');
+  }
+});
+document.addEventListener('submit',e=>{
+  const f=e.target; e.preventDefault();
+  if(f.id==='setupForm') saveSetup(f);
+  else if(f.id==='gameForm') saveGame(f);
+  else if(f.id==='ratingForm') saveRating(f);
+});
+function num(v,lo,hi){if(v===''||v==null) return null;const n=Math.round(+v);if(!isFinite(n)) return null;return Math.max(lo,Math.min(hi,n));}
+function saveSetup(f){
+  const p=clone(prof());
+  p.platform=(f.querySelector('input[name=pl]:checked')||{}).value||'chesscom';
+  p.rating=num($('#su-rating').value,100,3200);
+  p.goal=num($('#su-goal').value,200,3200)||2000;
+  if(p.rating&&p.goal<=p.rating) p.goal=Math.min(3200,p.rating+100);
+  p.minutes=+((f.querySelector('input[name=min]:checked')||{}).value||60);
+  p.white=$('#su-white').value; p.e4=$('#su-e4').value; p.d4=$('#su-d4').value;
+  const sd=$('#su-start').value; if(/^\d{4}-\d{2}-\d{2}$/.test(sd)) p.start=sd;
+  const first=!S.profile||!S.profile.set;
+  p.set=true; S.profile=p; persist('profile'); planCache.clear(); S.viewDay=null;
+  setView('today');
+  const t=todayIdx();
+  toast(first?('План на 360 дней готов. '+(t>=1&&t<=PLAN_DAYS?'Сегодня — день '+t+'.':'')):'План обновлён.');
+}
+
+/* ---------------- modal forms ---------------- */
+function openModal(html){const ov=$('#overlay');$('#dialog').innerHTML=html;ov.hidden=false;const f=$('#dialog input,#dialog select,#dialog textarea');if(f) setTimeout(()=>f.focus(),30);}
+function closeModal(){$('#overlay').hidden=true;$('#dialog').innerHTML='';}
+$('#overlay').addEventListener('click',e=>{if(e.target.id==='overlay') closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#overlay').hidden) closeModal();});
+function segM(name,opts,val){return '<div class="seg">'+opts.map(([v,l])=>'<label class="seg-o"><input type="radio" name="'+name+'" id="gf-'+name+'-'+v+'" value="'+v+'"'+(String(val)===String(v)?' checked':'')+'><span>'+l+'</span></label>').join('')+'</div>';}
+function openGameForm(){
+  const p=prof();
+  const ops=[repById('white',p.white).name,repById('e4',p.e4).name,repById('d4',p.d4).name];
+  openModal('<form id="gameForm" novalidate style="display:grid;gap:16px"><h2>Записать партию</h2>'+
+    '<div><span class="lbl" style="display:block">Результат</span>'+segM('r',[['W','Победа'],['D','Ничья'],['L','Поражение']],'W')+'</div>'+
+    '<div><span class="lbl" style="display:block">Цвет</span>'+segM('c',[['w','Белые'],['b','Чёрные']],'w')+'</div>'+
+    '<div class="row2"><label class="field" for="g-o">Рейтинг соперника<input id="g-o" type="number" inputmode="numeric" min="100" max="3500"></label>'+
+    '<label class="field" for="g-me">Ваш рейтинг после партии<input id="g-me" type="number" inputmode="numeric" min="100" max="3500"></label></div>'+
+    '<label class="field" for="g-op">Дебют<select id="g-op">'+ops.map(o=>'<option>'+esc(o)+'</option>').join('')+'<option>Другое</option></select></label>'+
+    '<div><span class="lbl" style="display:block">Был зевок?</span>'+segM('b',[['0','Нет'],['1','Пешка'],['2','Фигура или больше']],'0')+'</div>'+
+    '<label class="field" for="g-e">Главная ошибка — коротко<textarea id="g-e" rows="2" maxlength="300" placeholder="Например: 18…Лd8 — не заметил вилку конём на c7"></textarea></label>'+
+    '<div class="row2"><label class="field" for="g-u">Ссылка на партию<input id="g-u" type="url" placeholder="https://…"></label>'+
+    '<label class="field" for="g-d">Дата<input id="g-d" type="date" value="'+todayYmd()+'"></label></div>'+
+    '<label class="check-row" for="g-a"><input id="g-a" type="checkbox"> Уже разобрана</label>'+
+    '<div class="actions"><button type="button" class="btn" data-act="modal-close">Отмена</button><button type="submit" class="btn primary">Сохранить партию</button></div></form>');
+}
+function saveGame(f){
+  ensureProfile();
+  const val=n=>(f.querySelector('input[name='+n+']:checked')||{}).value;
+  const d=$('#g-d').value;
+  const u=$('#g-u').value.trim();
+  const g={id:newId(),d:/^\d{4}-\d{2}-\d{2}$/.test(d)?d:todayYmd(),r:val('r')||'W',c:val('c')||'w',
+    o:num($('#g-o').value,100,3500),me:num($('#g-me').value,100,3500),op:$('#g-op').value.slice(0,80),
+    b:+(val('b')||0),e:$('#g-e').value.trim().slice(0,300),u:/^https?:\/\//i.test(u)?u.slice(0,300):'',a:$('#g-a').checked};
+  S.games.list.push(g);
+  if(S.games.list.length>600) S.games.list=gamesSorted().slice(-600);
+  persist('games'); closeModal(); render();
+  toast(g.a?'Партия записана.':'Партия записана с пометкой «без разбора».');
+}
+function openRatingForm(){
+  const cur=currentRating();
+  openModal('<form id="ratingForm" novalidate style="display:grid;gap:16px"><h2>Записать рейтинг</h2>'+
+    '<div class="row2"><label class="field" for="rf-v">Рейтинг в рапиде<input id="rf-v" type="number" inputmode="numeric" min="100" max="3500" value="'+(cur||'')+'"></label>'+
+    '<label class="field" for="rf-d">Дата<input id="rf-d" type="date" value="'+todayYmd()+'"></label></div>'+
+    '<p class="hint">Записывайте рейтинг раз в неделю, в день итогов. Точки появятся на графике рядом с линией цели.</p>'+
+    '<div class="actions"><button type="button" class="btn" data-act="modal-close">Отмена</button><button type="submit" class="btn primary">Сохранить</button></div></form>');
+}
+function saveRating(f){
+  const v=num($('#rf-v').value,100,3500); if(!v){toast('Введите рейтинг числом, например 1250.');return;}
+  ensureProfile();
+  const d=$('#rf-d').value;
+  S.ratings.list.push({id:newId(),d:/^\d{4}-\d{2}-\d{2}$/.test(d)?d:todayYmd(),v});
+  if(S.ratings.list.length>800) S.ratings.list=S.ratings.list.slice(-800);
+  if(!S.profile.rating){S.profile.rating=v;persist('profile');}
+  persist('ratings'); closeModal(); render(); toast('Рейтинг '+v+' записан.');
+}
+
+/* ---------------- timer ---------------- */
+let timer=null, tInt=null, actx=null;
+function ensureAudio(){try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();if(actx.state==='suspended') actx.resume();}catch(e){actx=null;}}
+function beep(){if(!actx) return;try{[0,.28,.56].forEach(o=>{const os=actx.createOscillator(),g=actx.createGain();os.frequency.value=880;g.gain.setValueAtTime(.0001,actx.currentTime+o);g.gain.exponentialRampToValueAtTime(.25,actx.currentTime+o+.02);g.gain.exponentialRampToValueAtTime(.0001,actx.currentTime+o+.2);os.connect(g);g.connect(actx.destination);os.start(actx.currentTime+o);os.stop(actx.currentTime+o+.22);});}catch(e){}}
+function startTimer(d,i){
+  const t=dayPlan(d).tasks[i]; ensureAudio();
+  timer={d,i,label:t.t,remain:t.min*60000,end:Date.now()+t.min*60000,running:true,over:false};
+  clearInterval(tInt); tInt=setInterval(tick,500); tick();
+}
+function tick(){
+  if(!timer){$('#timerbar').hidden=true;return;}
+  if(timer.running){timer.remain=Math.max(0,timer.end-Date.now());if(timer.remain===0&&!timer.over){timer.over=true;timer.running=false;beep();}}
+  const sec=Math.ceil(timer.remain/1000), mm=String(Math.floor(sec/60)).padStart(2,'0'), ss=String(sec%60).padStart(2,'0');
+  const bar=$('#timerbar'); bar.hidden=false;
+  bar.innerHTML='<div class="timer-in"><span class="timer-t" aria-live="off">'+(timer.over?'00:00':mm+':'+ss)+'</span><span class="timer-l">'+(timer.over?'Время вышло · ':'')+esc(timer.label)+'</span>'+
+    (timer.over?'':'<button class="btn" data-act="t-pause">'+(timer.running?'Пауза':'Продолжить')+'</button>')+
+    '<button class="btn solid" data-act="t-done">Готово</button><button class="btn" data-act="t-stop" aria-label="Остановить таймер">✕</button></div>';
+}
+function timerPause(){if(!timer) return;if(timer.running){timer.remain=Math.max(0,timer.end-Date.now());timer.running=false;}else{timer.end=Date.now()+timer.remain;timer.running=true;}tick();}
+function timerStop(){timer=null;clearInterval(tInt);tInt=null;$('#timerbar').hidden=true;$('#timerbar').innerHTML='';}
+
+/* ---------------- toast ---------------- */
+let toastT=null;
+function toast(msg,html){const t=$('#toast');if(html) t.innerHTML=msg; else t.textContent=msg;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>{t.hidden=true;},3600);}
+
+/* ---------------- boot ---------------- */
+const h0=(location.hash||'').slice(1); if(VIEWS.indexOf(h0)>=0) S.view=h0;
+let lastDay=todayYmd();
+render();
+connect();
+setInterval(()=>{const k=todayYmd();if(k!==lastDay){lastDay=k;if(!isEditing()) render();}},60000);
+})();
+</script>
+</body>
+</html>
