@@ -479,11 +479,28 @@ function themeUrl(slug){
   return 'https://lichess.org/training/'+slug;
 }
 function repById(list,id){return REP[list].find(r=>r.id===id)||REP[list][0];}
+function puzSite(){const p=prof();return p.puz||(p.platform==='lichess'?'lichess':'chesscom');}
+// chess.com Learning mode has no per-theme links, so the task names the theme to pick (English name as a search hint)
+const CC_THEME={hangingPiece:'Hanging Piece',fork:'Fork',pin:'Pin',mateIn2:'Mate in 2',backRankMate:'Back Rank',discoveredAttack:'Discovered Attack',skewer:'Skewer',
+  trappedPiece:'Trapped Piece',capturingDefender:'Removing the Defender',doubleCheck:'Double Check',deflection:'Deflection',attraction:'Decoy',intermezzo:'Zwischenzug',
+  interference:'Interference',clearance:'Clearance',xRayAttack:'X-Ray',quietMove:'Quiet Move',mateIn3:'Mate in 3',sacrifice:'Sacrifice',advancedPawn:'Promotion',
+  defensiveMove:'Defense',opening:'Opening',bishopEndgame:'Endgame',pawnEndgame:'Endgame',endgame:'Endgame'};
+function puzLink(slug,name){
+  if(puzSite()!=='chesscom') return {href:themeUrl(slug),hl:'Задачи на Lichess',hint:''};
+  if(slug==='dashboard'){
+    const u=(prof().cc||'').trim().toLowerCase();
+    return {href:u?'https://www.chess.com/member/'+encodeURIComponent(u)+'/stats/puzzles':'https://www.chess.com/puzzles/rated',hl:'Статистика задач',
+      hint:' В статистике задач Chess.com видно, какие темы даются хуже всего, — их и решайте в режиме Learning («Обучение»).'};
+  }
+  const en=CC_THEME[slug];
+  if(en) return {href:'https://www.chess.com/puzzles/learning',hl:'Задачи на Chess.com',hint:' На Chess.com откройте режим Learning («Обучение») и выберите тему «'+name+'» — по-английски '+en+'.'};
+  return {href:'https://www.chess.com/puzzles/rated',hl:'Задачи на Chess.com',hint:' На Chess.com — рейтинговые задачи: темы там вперемешку, как в партии.'};
+}
 
 let planCache=new Map(), planKey='';
 function dayPlan(d){
   const p=prof();
-  const key=[p.minutes,p.platform,p.white,p.e4,p.d4,p.goal].join('|');
+  const key=[p.minutes,p.platform,p.white,p.e4,p.d4,p.goal,puzSite(),p.cc].join('|');
   if(key!==planKey){planCache.clear();planKey=key;}
   if(planCache.has(d)) return planCache.get(d);
   const st=Math.floor((d-1)/90), s=(d-1)%90, S_=STAGES[st];
@@ -498,15 +515,19 @@ function dayPlan(d){
     x:fresh?'Пройдите партию сами, движок включайте только на ключевых моментах. Запишите одну мысль.':'Сначала без движка: найдите 3 момента, где можно было сыграть лучше. Потом проверьте движком и отметьте партию разобранной.',
     href:plat.an,hl:'Доска анализа',act:'analyze'});
   const habit=()=>({k:'habit',min:5,t:'Одно правило из ошибки',x:'Сформулируйте правило из разбора, например «перед ходом конём проверяю, куда он прыгнет дальше». Прочитайте его перед следующей партией.'});
-  const storm=()=>({k:'puz',min:sc(10),t:'Puzzle Storm: 3 минуты на скорость',x:'Две-три попытки. Рекорд растёт вместе с узнаванием шаблонов.',href:'https://lichess.org/storm',hl:'Puzzle Storm'});
+  const ccP=puzSite()==='chesscom';
+  const storm=()=>ccP?
+    {k:'puz',min:sc(10),t:'Puzzle Rush: 3 минуты на скорость',x:'Две-три попытки в режиме «3 минуты». Рекорд растёт вместе с узнаванием шаблонов.',href:'https://www.chess.com/puzzles/rush',hl:'Puzzle Rush'}:
+    {k:'puz',min:sc(10),t:'Puzzle Storm: 3 минуты на скорость',x:'Две-три попытки. Рекорд растёт вместе с узнаванием шаблонов.',href:'https://lichess.org/storm',hl:'Puzzle Storm'};
   let tasks=[], type, W_=null, w=-1, dow=-1, ex=-1;
   if(s<84){
     w=Math.floor(s/7); dow=s%7; W_=WEEKS[st][w]; type=DAYTYPE[dow];
     const which=w%3, rep=which===0?repById('white',p.white):which===1?repById('e4',p.e4):repById('d4',p.d4);
     const side=which===0?'Белыми:':which===1?'Против 1.e4:':'Против 1.d4:';
+    const PL=puzLink(W_.p,W_.t);
     const puz=(n,m,label)=>({k:'puz',min:sc(m),n:sn(n),t:(label||('Задачи «'+W_.t+'»'))+' — '+sn(n)+' шт.',
-      x:label?'Короткая разминка по теме недели, чтобы глаз привык к шаблону.':'Без спешки: найдите ход, проверьте ответ соперника и только потом двигайте. Ошиблись — разберите, почему.',
-      href:themeUrl(W_.p),hl:'Задачи на Lichess'});
+      x:(label?'Короткая разминка по теме недели, чтобы глаз привык к шаблону.':'Без спешки: найдите ход, проверьте ответ соперника и только потом двигайте. Ошиблись — разберите, почему.')+PL.hint,
+      href:PL.href,hl:PL.hl});
     const end=(m,again)=>({k:'end',min:sc(m),t:(again?'Закрепление: ':'Эндшпиль: ')+W_.end,
       x:W_.ei+(again?' Сыграйте позицию против компьютера ещё раз, на этот раз без подсказок.':' Найдите урок в «Практике» Lichess, затем сыграйте позицию против компьютера.'),
       href:'https://lichess.org/practice',hl:'Практика Lichess'});
@@ -521,18 +542,24 @@ function dayPlan(d){
       case 3: tasks=[opening(20),game()]; break;
       case 4: tasks=[analyze(20),end(20,st!==2),puz(10,15)]; break;
       case 5: tasks=[puz(5,5,'Разминка'),game(),analyze(15,true)]; break;
-      case 6: tasks=[st===3&&w===1?{k:'puz',min:sc(10),t:'Тренажёр координат',x:'Две-три серии. Цель — называть поле, не задумываясь.',href:'https://lichess.org/training/coordinate',hl:'Координаты на Lichess'}:storm(),
+      case 6: tasks=[st===3&&w===1?(ccP?
+          {k:'puz',min:sc(10),t:'Тренажёр Vision',x:'Две-три серии на координаты. Цель — называть поле, не задумываясь.',href:'https://www.chess.com/vision',hl:'Vision на Chess.com'}:
+          {k:'puz',min:sc(10),t:'Тренажёр координат',x:'Две-три серии. Цель — называть поле, не задумываясь.',href:'https://lichess.org/training/coordinate',hl:'Координаты на Lichess'}):storm(),
         {k:'review',min:sc(15),t:'Итог недели',x:'Запишите текущий рейтинг, посчитайте зевки за неделю в журнале и решите: тема «'+W_.t+'» усвоена? Если нет — берите её задачи в разминки следующей недели.',act:'rating'}]; break;
     }
   } else {
     ex=s-84; type=EXAMTYPE[ex];
     const ends=[0,4,8].map(i=>WEEKS[st][i].end).join(', ');
     switch(ex){
-      case 0: tasks=[{k:'test',min:sc(25),t:'Тест: Puzzle Streak',x:'Решайте задачи подряд до первой ошибки. Запишите результат — в следующем этапе сравните.',href:'https://lichess.org/streak',hl:'Puzzle Streak',act:'value'},
-        {k:'puz',min:sc(20),n:sn(12),t:'Смешанная тактика этапа — '+sn(12)+' шт.',x:'Задачи без темы. Как в партии: сначала поймите, что происходит, потом ищите удар.',href:'https://lichess.org/training',hl:'Задачи на Lichess'}]; break;
+      case 0: tasks=[ccP?
+          {k:'test',min:sc(25),t:'Тест: Puzzle Rush «Выживание»',x:'Режим «Выживание» (Survival): задачи без ограничения времени, пока не ошибётесь три раза. Запишите результат — в следующем этапе сравните.',href:'https://www.chess.com/puzzles/rush',hl:'Puzzle Rush',act:'value'}:
+          {k:'test',min:sc(25),t:'Тест: Puzzle Streak',x:'Решайте задачи подряд до первой ошибки. Запишите результат — в следующем этапе сравните.',href:'https://lichess.org/streak',hl:'Puzzle Streak',act:'value'},
+        {k:'puz',min:sc(20),n:sn(12),t:'Смешанная тактика этапа — '+sn(12)+' шт.',x:'Задачи без темы. Как в партии: сначала поймите, что происходит, потом ищите удар.',
+          href:ccP?'https://www.chess.com/puzzles/rated':'https://lichess.org/training',hl:ccP?'Задачи на Chess.com':'Задачи на Lichess'}]; break;
       case 1: tasks=[game('Экзаменационная партия '+tc),analyze(25)]; break;
       case 2: tasks=[{k:'review',min:sc(30),t:'Журнал ошибок этапа',x:'Просмотрите разборы всех партий этапа. Какие ошибки повторяются? Выпишите три главные.',act:'journal'},
-        {k:'puz',min:sc(20),n:sn(12),t:'Задачи на вашу слабую тему — '+sn(12)+' шт.',x:'Панель задач Lichess показывает темы, где вы ошибаетесь чаще.',href:'https://lichess.org/training/dashboard/30',hl:'Панель задач'}]; break;
+        (()=>{const L=puzLink('dashboard','');return {k:'puz',min:sc(20),n:sn(12),t:'Задачи на вашу слабую тему — '+sn(12)+' шт.',
+          x:ccP?L.hint.trim():'Панель задач Lichess показывает темы, где вы ошибаетесь чаще.',href:L.href,hl:ccP?L.hl:'Панель задач'};})()]; break;
       case 3: tasks=[game('Экзаменационная партия '+tc),analyze(20)]; break;
       case 4: tasks=[{k:'end',min:sc(40),t:'Эндшпильный экзамен',x:'Сыграйте против компьютера три позиции этапа: '+ends+'. Цель — выиграть или удержать каждую с первой попытки.',href:'https://lichess.org/practice',hl:'Практика Lichess'},storm()]; break;
       case 5: tasks=d===PLAN_DAYS?
@@ -540,7 +567,7 @@ function dayPlan(d){
         [{k:'review',min:sc(15),t:'Итог этапа',x:'Запишите рейтинг и сравните с линией цели на графике. Отстаёте — не паникуйте: на этих рейтингах рост идёт ступенями.',act:'rating'},game('Праздничная партия '+tc)]; break;
     }
   }
-  const plan={d,st,w,dow,ex,type,week:W_,tasks,minUrl:W_?themeUrl(W_.p):'https://lichess.org/training'};
+  const plan={d,st,w,dow,ex,type,week:W_,tasks,minUrl:W_?puzLink(W_.p,W_.t).href:(ccP?'https://www.chess.com/puzzles/rated':'https://lichess.org/training')};
   planCache.set(d,plan);
   return plan;
 }
@@ -934,6 +961,8 @@ function viewSetup(){
     '<fieldset><legend>Где вы играете рапид?</legend>'+seg('pl',[['chesscom','Chess.com'],['lichess','Lichess']],p.platform)+'</fieldset>'+
     (CC_OK?'<div><label class="field" for="su-cc">Ник на chess.com<input id="su-cc" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="26" placeholder="например, magnus" value="'+esc(p.cc||'')+'"></label>'+
       '<p class="hint" style="margin-top:8px">По нику сайт сам подтягивает рапид-партии с даты старта и стартовый рейтинг, как в видео. Партии попадают в журнал с пометкой «без разбора».</p></div>':'')+
+    '<fieldset><legend>Где решать задачи?</legend>'+seg('pz',[['chesscom','Chess.com'],['lichess','Lichess']],puzSite())+
+      '<p class="hint">Chess.com — режим «Обучение» по темам, рейтинговые задачи и Puzzle Rush; без подписки задач в день мало. Lichess — всё бесплатно, тема открывается сразу по ссылке.</p></fieldset>'+
     '<div><div class="row2"><label class="field" for="su-rating">Текущий рейтинг в рапиде<input id="su-rating" type="number" inputmode="numeric" min="100" max="3200" placeholder="например, 800" value="'+(p.rating||'')+'"></label>'+
     '<label class="field" for="su-goal">Цель<input id="su-goal" type="number" inputmode="numeric" min="200" max="3200" value="'+p.goal+'"></label></div>'+
     '<p class="hint" style="margin-top:8px">Рейтинги на Lichess обычно выше, чем на Chess.com. Сравнивайте себя с собой на одной площадке. Нет рейтинга — оставьте поле пустым и запишите его после первых партий.</p></div>'+
@@ -1041,6 +1070,7 @@ function num(v,lo,hi){if(v===''||v==null) return null;const n=Math.round(+v);if(
 function saveSetup(f){
   const p=clone(prof());
   p.platform=(f.querySelector('input[name=pl]:checked')||{}).value||'chesscom';
+  p.puz=(f.querySelector('input[name=pz]:checked')||{}).value||'chesscom';
   p.rating=num($('#su-rating').value,100,3200);
   p.goal=num($('#su-goal').value,200,3200)||2000;
   if(p.rating&&p.goal<=p.rating) p.goal=Math.min(3200,p.rating+100);
