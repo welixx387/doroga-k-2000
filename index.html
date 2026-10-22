@@ -1182,17 +1182,29 @@ function ccPanel(){
 }
 async function ccSync(opts){
   opts=opts||{};
-  const p=prof(), user=(p.cc||'').toLowerCase();
+  const p=prof();
+  let user=(p.cc||'').toLowerCase();
   if(!CC_OK||!user||ccBusy) return;
   const st=lsGet('ccsync')||{};
-  const full=!!opts.full||st.user!==user||st.start!==p.start;
+  let full=!!opts.full||st.user!==user||st.start!==p.start;
   if(!opts.manual&&!full&&st.at&&Date.now()-st.at<(opts.minAge||10*60000)) return;
   ccBusy=true; scheduleRender();
   try{
-    const base='https://api.chess.com/pub/player/'+encodeURIComponent(user);
-    let rapid=null;
-    try{const s=await ccFetch(base+'/stats');rapid=s&&s.chess_rapid&&s.chess_rapid.last?s.chess_rapid.last.rating:null;}
-    catch(e){if(e&&e.code==='nouser') throw e;}
+    const api=u=>'https://api.chess.com/pub/player/'+encodeURIComponent(u);
+    // "_" and "-" are easy to mix up in chess.com usernames: try those spellings before reporting an unknown player
+    const fixes=[x=>x,x=>x.replace(/_/g,'-'),x=>x.replace(/-/g,'_'),x=>x.replace(/[_-]/g,c=>c==='_'?'-':'_')];
+    let rapid=null, fixNote='';
+    for(let i=0;i<fixes.length;i++){
+      const cand=fixes[i](user);
+      if(fixes.slice(0,i).some(f=>f(user)===cand)) continue;
+      try{
+        const s=await ccFetch(api(cand)+'/stats');
+        rapid=s&&s.chess_rapid&&s.chess_rapid.last?s.chess_rapid.last.rating:null;
+        if(cand!==user){user=cand;full=true;ensureProfile();S.profile.cc=fixes[i](p.cc);persist('profile');fixNote=' Ник исправлен на «'+S.profile.cc+'».';}
+        break;
+      }catch(e){if(!e||e.code!=='nouser') break;}
+    }
+    const base=api(user);
     const arch=(await ccFetch(base+'/games/archives')).archives||[];
     let lastEnd=full?0:(st.lastEnd||0);
     const from=new Date(Math.max(utc(p.start),lastEnd*1000)-DAY_MS);
@@ -1227,14 +1239,14 @@ async function ccSync(opts){
     S.ccErr=null;
     if(added.length){
       const w=added.filter(x=>x.r==='W').length, dr=added.filter(x=>x.r==='D').length, l=added.length-w-dr;
-      S.syncMsg='С chess.com: '+added.length+' '+plural(added.length,'партия','партии','партий')+' (+'+w+' ='+dr+' −'+l+'). '+plural(added.length,'Ждёт','Ждут','Ждут')+' разбора.'+ratingNote;
-    } else if(opts.manual||ratingNote){
-      S.syncMsg='Новых рапид-партий с '+fmtShort.format(utc(p.start))+' нет.'+ratingNote;
+      S.syncMsg='С chess.com: '+added.length+' '+plural(added.length,'партия','партии','партий')+' (+'+w+' ='+dr+' −'+l+'). '+plural(added.length,'Ждёт','Ждут','Ждут')+' разбора.'+ratingNote+fixNote;
+    } else if(opts.manual||ratingNote||fixNote){
+      S.syncMsg='Новых рапид-партий с '+fmtShort.format(utc(p.start))+' нет.'+ratingNote+fixNote;
     }
   }catch(e){
     const code=e&&e.code;
     S.ccErr=code==='nouser'?'игрок не найден':code==='rate'?'chess.com просит подождать минуту':'нет связи с chess.com';
-    if(opts.manual||code==='nouser') S.syncMsg=code==='nouser'?'Игрок «'+p.cc+'» не найден на chess.com. Проверьте ник в настройке.':code==='rate'?'chess.com просит подождать. Попробуйте через минуту.':'Не удалось связаться с chess.com. Проверьте интернет и попробуйте ещё раз.';
+    if(opts.manual||code==='nouser') S.syncMsg=code==='nouser'?'Игрок «'+p.cc+'» не найден на chess.com. Проверьте ник в настройке: он должен совпадать с именем в профиле.':code==='rate'?'chess.com просит подождать. Попробуйте через минуту.':'Не удалось связаться с chess.com. Проверьте интернет и попробуйте ещё раз.';
   }finally{
     ccBusy=false; scheduleRender();
     if(S.syncMsg){toast(S.syncMsg);S.syncMsg=null;}
